@@ -1,56 +1,116 @@
-# 项目上下文
+# MindType - MBTI AI 测试网站
 
-### 版本技术栈
+## 项目概述
+
+一个融合专业心理学测试与AI智能解读的MBTI平台，包含：
+- 正规MBTI测试 + AI深度解读
+- SBTI趣味恶搞引流测试
+- AI智能对话问答
+- 行业专区（未来职业规划服务入口）
+
+## 技术栈
 
 - **Framework**: Next.js 16 (App Router)
 - **Core**: React 19
 - **Language**: TypeScript 5
-- **UI 组件**: shadcn/ui (基于 Radix UI)
+- **UI组件**: shadcn/ui
 - **Styling**: Tailwind CSS 4
+- **AI集成**: coze-coding-dev-sdk (LLM流式输出)
 
 ## 目录结构
 
 ```
-├── public/                 # 静态资源
-├── scripts/                # 构建与启动脚本
-│   ├── build.sh            # 构建脚本
-│   ├── dev.sh              # 开发环境启动脚本
-│   ├── prepare.sh          # 预处理脚本
-│   └── start.sh            # 生产环境启动脚本
-├── src/
-│   ├── app/                # 页面路由与布局
-│   ├── components/ui/      # Shadcn UI 组件库
-│   ├── hooks/              # 自定义 Hooks
-│   ├── lib/                # 工具库
-│   │   └── utils.ts        # 通用工具函数 (cn)
-│   └── server.ts           # 自定义服务端入口
-├── next.config.ts          # Next.js 配置
-├── package.json            # 项目依赖管理
-└── tsconfig.json           # TypeScript 配置
+src/
+├── app/
+│   ├── layout.tsx           # 根布局
+│   ├── page.tsx            # 首页
+│   ├── globals.css         # 全局样式 + 自定义动画
+│   ├── sbti/page.tsx       # SBTI趣味测试
+│   ├── test/page.tsx        # MBTI测试
+│   ├── test/result/page.tsx # 测试结果页
+│   ├── industry/page.tsx    # 行业总览
+│   ├── industry/[slug]/page.tsx # 各行业详情
+│   └── api/
+│       ├── mbti/interpret/route.ts # AI解读API (SSE流式)
+│       └── chat/route.ts    # AI对话API (SSE流式)
+├── components/
+│   ├── NavBar.tsx           # 导航栏
+│   ├── StarBackground.tsx  # 星星背景动画
+│   ├── QuestionCard.tsx     # 测试题目卡片
+│   ├── AIResponse.tsx       # AI响应展示 (打字机效果)
+│   ├── ChatInterface.tsx    # AI对话界面
+│   ├── IndustryCard.tsx      # 行业卡片
+│   ├── SBITCertificate.tsx  # SBTI恶搞证书
+│   └── MBTIGrid.tsx         # 16种人格展示
+├── hooks/
+│   ├── useTestStore.tsx     # 测试状态管理
+│   └── useAIChat.ts         # AI对话hook
+├── lib/
+│   ├── mbti-data.ts        # MBTI数据 + 计分逻辑
+│   ├── sbti-data.ts         # SBTI数据
+│   ├── industry-data.ts      # 行业数据
+│   └── utils.ts             # 工具函数
+└── types/
+    └── index.ts             # 类型定义
 ```
 
-- 项目文件（如 app 目录、pages 目录、components 等）默认初始化到 `src/` 目录下。
+## 页面路由
 
-## 包管理规范
+| 路由 | 说明 |
+|------|------|
+| `/` | 首页 - 双入口引导 |
+| `/sbti` | SBTI趣味测试 |
+| `/test` | MBTI正经测试 |
+| `/test/result?type=XXX` | 测试结果页 |
+| `/industry` | 行业专区 |
+| `/industry/[slug]` | 各行业详情页 |
 
-**仅允许使用 pnpm** 作为包管理器，**严禁使用 npm 或 yarn**。
-**常用命令**：
-- 安装依赖：`pnpm add <package>`
-- 安装开发依赖：`pnpm add -D <package>`
-- 安装所有依赖：`pnpm install`
-- 移除依赖：`pnpm remove <package>`
+## 核心功能
 
-## 开发规范
+### 1. MBTI测试
+- 28道核心题目，覆盖E/I、S/N、T/F、J/P四维度
+- 滑块选择支持（1-5分）
+- 键盘快捷键操作（← → 或 1-5）
+- localStorage进度保存
 
-### Hydration 问题防范
+### 2. AI解读 (SSE流式)
+- API: `POST /api/mbti/interpret`
+- 流式输出，打字机效果
+- 分段展示：性格特质、优势、盲点、人际关系、职业建议
 
-1. 严禁在 JSX 渲染逻辑中直接使用 typeof window、Date.now()、Math.random() 等动态数据。**必须使用 'use client' 并配合 useEffect + useState 确保动态内容仅在客户端挂载后渲染**；同时严禁非法 HTML 嵌套（如 <p> 嵌套 <div>）。
-2. **禁止使用 head 标签**，优先使用 metadata，详见文档：https://nextjs.org/docs/app/api-reference/functions/generate-metadata
-   1. 三方 CSS、字体等资源可在 `globals.css` 中顶部通过 `@import` 引入或使用 next/font
-   2. preload, preconnect, dns-prefetch 通过 ReactDOM 的 preload、preconnect、dns-prefetch 方法引入
-   3. json-ld 可阅读 https://nextjs.org/docs/app/guides/json-ld
+### 3. AI对话 (SSE流式)
+- API: `POST /api/chat`
+- 支持多轮对话
+- 预设快捷问题
+- 打字机效果展示回复
 
-## UI 设计与组件规范 (UI & Styling Standards)
+### 4. SBTI趣味测试
+- 8道趣味题目
+- 恶搞人格类型（宅神、摸鱼狂人等）
+- 生成"官方恶搞证书"
 
-- 模板默认预装核心组件库 `shadcn/ui`，位于`src/components/ui/`目录下
-- Next.js 项目**必须默认**采用 shadcn/ui 组件、风格和规范，**除非用户指定用其他的组件和规范。**
+### 5. 行业专区
+- 科技、金融、设计、教育等6大行业
+- 预留职业规划服务扩展接口
+
+## 开发命令
+
+```bash
+pnpm install     # 安装依赖
+pnpm dev        # 开发环境 (端口5000)
+pnpm build      # 生产构建
+pnpm lint       # ESLint检查
+```
+
+## 环境变量
+
+项目使用预置环境变量，无需额外配置：
+- `DEPLOY_RUN_PORT`: 5000
+- `COZE_PROJECT_DOMAIN_DEFAULT`: 访问域名
+
+## 注意事项
+
+1. **AI功能**: 使用coze-coding-dev-sdk，必须在服务端调用
+2. **SSE流式**: 所有AI接口均使用Server-Sent Events，前端需使用fetch + body.getReader()
+3. **状态管理**: 测试进度使用localStorage持久化
+4. **组件规范**: 遵循shadcn/ui风格，深色主题设计

@@ -15,8 +15,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/hooks/useAuth';
+import { useAuth, supabase } from '@/hooks/useAuth';
 
 interface TestRecord {
   id: string;
@@ -66,7 +65,9 @@ export default function ProfilePage() {
 
   const fetchRecentTests = async () => {
     if (!user) return;
-    const { data } = await supabase
+    const client = supabase();
+    if (!client) return;
+    const { data } = await client
       .from('mbti_results')
       .select('*')
       .eq('user_id', user.id)
@@ -80,7 +81,9 @@ export default function ProfilePage() {
 
   const fetchPointHistory = async () => {
     if (!user) return;
-    const { data } = await supabase
+    const client = supabase();
+    if (!client) return;
+    const { data } = await client
       .from('point_transactions')
       .select('*')
       .eq('user_id', user.id)
@@ -95,18 +98,23 @@ export default function ProfilePage() {
   const handleCheckin = async () => {
     if (!user || !canCheckin) return;
     setCheckinLoading(true);
+    const client = supabase();
+    if (!client) {
+      setCheckinLoading(false);
+      return;
+    }
 
     try {
-      const pointsEarned = 5 + Math.min(profile?.consecutiveCheckins || 0, 5); // 连续签到加成
+      const pointsEarned = 5 + Math.min(profile?.consecutiveCheckins || 0, 5);
 
       // 添加签到记录
-      await supabase.from('checkin_records').insert({
+      await client.from('checkin_records').insert({
         user_id: user.id,
         points_earned: pointsEarned,
       });
 
       // 添加积分记录
-      await supabase.from('point_transactions').insert({
+      await client.from('point_transactions').insert({
         user_id: user.id,
         amount: pointsEarned,
         type: 'checkin',
@@ -114,7 +122,7 @@ export default function ProfilePage() {
       });
 
       // 更新用户积分和连续签到
-      await supabase
+      await client
         .from('user_profiles')
         .update({
           points: (profile?.points || 0) + pointsEarned,
@@ -155,29 +163,32 @@ export default function ProfilePage() {
 
     // 记录分享
     if (user) {
-      await supabase.from('share_records').insert({
-        user_id: user.id,
-        share_type: 'test_result',
-        platform: 'link',
-        points_earned: 10,
-      });
+      const client = supabase();
+      if (client) {
+        await client.from('share_records').insert({
+          user_id: user.id,
+          share_type: 'test_result',
+          platform: 'link',
+          points_earned: 10,
+        });
 
-      await supabase.from('point_transactions').insert({
-        user_id: user.id,
-        amount: 10,
-        type: 'share',
-        description: '分享测试结果',
-      });
+        await client.from('point_transactions').insert({
+          user_id: user.id,
+          amount: 10,
+          type: 'share',
+          description: '分享测试结果',
+        });
 
-      await supabase
-        .from('user_profiles')
-        .update({
-          points: (profile?.points || 0) + 10,
-        })
-        .eq('id', user.id);
+        await client
+          .from('user_profiles')
+          .update({
+            points: (profile?.points || 0) + 10,
+          })
+          .eq('id', user.id);
 
-      await refreshProfile();
-      await fetchPointHistory();
+        await refreshProfile();
+        await fetchPointHistory();
+      }
     }
   };
 

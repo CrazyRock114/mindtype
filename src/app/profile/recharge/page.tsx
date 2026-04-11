@@ -37,20 +37,23 @@ export default function RechargePage() {
       const totalCoins = pkg.coins + pkg.bonus;
 
       // 添加积分记录
-      await supabase.from('point_transactions').insert({
-        user_id: user.id,
-        amount: totalCoins,
-        type: 'recharge',
-        description: `充值${pkg.coins}积分${pkg.bonus > 0 ? `（赠送${pkg.bonus}）` : ''}`,
-      });
+      const client = supabase();
+      if (client) {
+        await client.from('point_transactions').insert({
+          user_id: user.id,
+          amount: totalCoins,
+          type: 'recharge',
+          description: `充值${pkg.coins}积分${pkg.bonus > 0 ? `（赠送${pkg.bonus}）` : ''}`,
+        });
 
-      // 更新用户积分
-      await supabase
-        .from('user_profiles')
-        .update({
-          points: (profile?.points || 0) + totalCoins,
-        })
-        .eq('id', user.id);
+        // 更新用户积分
+        await client
+          .from('user_profiles')
+          .update({
+            points: (profile?.points || 0) + totalCoins,
+          })
+          .eq('id', user.id);
+      }
 
       await refreshProfile();
       alert(`充值成功！获得${totalCoins}积分`);

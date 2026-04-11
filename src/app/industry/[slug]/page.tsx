@@ -10,8 +10,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { industries } from '@/lib/industry-data';
 import { mbtiTypes } from '@/lib/mbti-data';
-import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/hooks/useAuth';
+import { useAuth, supabase } from '@/hooks/useAuth';
 import { useState, useEffect } from 'react';
 
 interface IndustryDetailPageProps {
@@ -40,7 +39,9 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
 
   const checkExistingAnalysis = async () => {
     if (!user) return;
-    const { data } = await supabase
+    const client = supabase();
+    if (!client) return;
+    const { data } = await client
       .from('user_industry_analyses')
       .select('*')
       .eq('user_id', user.id)
@@ -73,18 +74,24 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
       return;
     }
 
+    const client = supabase();
+    if (!client) {
+      alert('用户系统未配置，请稍后再试');
+      return;
+    }
+
     setIsAnalyzing(true);
 
     try {
       // 扣减积分
-      await supabase
+      await client
         .from('user_profiles')
         .update({
           points: (profile?.points || 0) - ANALYSIS_COST,
         })
         .eq('id', user.id);
 
-      await supabase.from('point_transactions').insert({
+      await client.from('point_transactions').insert({
         user_id: user.id,
         amount: -ANALYSIS_COST,
         type: 'spend',
@@ -92,7 +99,7 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
       });
 
       // 获取最新测试结果
-      const { data: latestResult } = await supabase
+      const { data: latestResult } = await client
         .from('mbti_results')
         .select('*')
         .eq('user_id', user.id)
@@ -102,7 +109,7 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
         .maybeSingle();
 
       // 保存分析记录
-      const { data: analysisRecord } = await supabase
+      const { data: analysisRecord } = await client
         .from('user_industry_analyses')
         .insert({
           user_id: user.id,
@@ -161,10 +168,13 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
 
       // 保存分析内容
       if (content) {
-        await supabase
-          .from('user_industry_analyses')
-          .update({ ai_interpretation: content })
-          .eq('id', analysisRecord?.id);
+        const saveClient = supabase();
+        if (saveClient) {
+          await saveClient
+            .from('user_industry_analyses')
+            .update({ ai_interpretation: content })
+            .eq('id', analysisRecord?.id);
+        }
 
         setHasAnalysis(true);
       }

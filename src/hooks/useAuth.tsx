@@ -1,8 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, User, Session, SupabaseClient } from '@supabase/supabase-js';
 
 interface UserProfile {
   id: string;
@@ -21,6 +20,7 @@ interface AuthContextType {
   session: Session | null;
   profile: UserProfile | null;
   isLoading: boolean;
+  isSupabaseConfigured: boolean;
   signUp: (email: string, password: string, username: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -30,20 +30,100 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-);
+// 检查Supabase是否已配置
+function getSupabaseUrl(): string {
+  // 优先使用Coze平台注入的环境变量
+  if (typeof window !== 'undefined') {
+    // 客户端：使用NEXT_PUBLIC_前缀
+    return process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  }
+  // 服务端
+  return process.env.COZE_SUPABASE_URL
+    || process.env.NEXT_PUBLIC_SUPABASE_URL
+    || '';
+}
+
+function getSupabaseAnonKey(): string {
+  if (typeof window !== 'undefined') {
+    return process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+  }
+  return process.env.COZE_SUPABASE_ANON_KEY
+    || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    || '';
+}
+
+function isSupabaseAvailable(): boolean {
+  const url = getSupabaseUrl();
+  const key = getSupabaseAnonKey();
+  return !!(url && key && url !== 'https://your-project.supabase.co' && key !== 'your-anon-key');
+}
+
+// 延迟初始化的supabase客户端
+let _supabaseClient: SupabaseClient | null = null;
+
+function getSupabaseClient(): SupabaseClient | null {
+  if (_supabaseClient) return _supabaseClient;
+  if (!isSupabaseAvailable()) return null;
+
+  try {
+    _supabaseClient = createClient(getSupabaseUrl(), getSupabaseAnonKey());
+    return _supabaseClient;
+  } catch {
+    return null;
+  }
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [configured, setConfigured] = useState(false);
 
-  const fetchProfile = async (userId: string) => {
+  useEffect(() => {
+    const available = isSupabaseAvailable();
+    setConfigured(available);
+
+    if (!available) {
+      setIsLoading(false);
+      return;
+    }
+
+    const client = getSupabaseClient();
+    if (!client) {
+      setIsLoading(false);
+      return;
+    }
+
+    // 获取初始session
+    client.auth.getSession().then(({ data: { session: sess } }) => {
+      setSession(sess);
+      setUser(sess?.user ?? null);
+      if (sess?.user) {
+        void fetchProfile(client, sess.user.id);
+      }
+      setIsLoading(false);
+    });
+
+    // 监听auth变化
+    const { data: { subscription } } = client.auth.onAuthStateChange(
+      async (event, sess) => {
+        setSession(sess);
+        setUser(sess?.user ?? null);
+        if (sess?.user) {
+          await fetchProfile(client, sess.user.id);
+        } else {
+          setProfile(null);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const fetchProfile = async (client: SupabaseClient, userId: string) => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await client
         .from('user_profiles')
         .select('*')
         .eq('id', userId)
@@ -68,12 +148,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
       } else {
         // 创建新用户profile
-        const { data: newProfile, error: createError } = await supabase
+        const { data: newProfile, error: createError } = await client
           .from('user_profiles')
           .insert({
             id: userId,
             username: null,
-            points: 100, // 新用户赠送100积分
+            points: 100,
             total_tests: 0,
             consecutive_checkins: 0,
           })
@@ -101,47 +181,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refreshProfile = async () => {
     if (user) {
-      await fetchProfile(user.id);
+      const client = getSupabaseClient();
+      if (client) {
+        await fetchProfile(client, user.id);
+      }
     }
   };
 
-  useEffect(() => {
-    // 获取初始session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      }
-      setIsLoading(false);
-    });
-
-    // 监听auth变化
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        } else {
-          setProfile(null);
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   const signUp = async (email: string, password: string, username: string) => {
+    const client = getSupabaseClient();
+    if (!client) {
+      return { error: new Error('用户系统未配置，请联系管理员') };
+    }
+
     try {
-      const { error } = await supabase.auth.signUp({
+      const { error } = await client.auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            username,
-          },
-        },
+        options: { data: { username } },
       });
       return { error };
     } catch (error) {
@@ -150,11 +207,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
+    const client = getSupabaseClient();
+    if (!client) {
+      return { error: new Error('用户系统未配置，请联系管理员') };
+    }
+
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error } = await client.auth.signInWithPassword({ email, password });
       return { error };
     } catch (error) {
       return { error: error as Error };
@@ -162,12 +221,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    const client = getSupabaseClient();
+    if (client) {
+      await client.auth.signOut();
+    }
     setProfile(null);
   };
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
     if (!user) return { error: new Error('Not logged in') };
+
+    const client = getSupabaseClient();
+    if (!client) {
+      return { error: new Error('用户系统未配置') };
+    }
 
     try {
       const dbUpdates: Record<string, unknown> = {};
@@ -176,7 +243,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (updates.bio !== undefined) dbUpdates.bio = updates.bio;
       if (updates.mbtiType !== undefined) dbUpdates.mbti_type = updates.mbtiType;
 
-      const { error } = await supabase
+      const { error } = await client
         .from('user_profiles')
         .update({ ...dbUpdates, updated_at: new Date().toISOString() })
         .eq('id', user.id);
@@ -198,6 +265,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         session,
         profile,
         isLoading,
+        isSupabaseConfigured: configured,
         signUp,
         signIn,
         signOut,
@@ -218,5 +286,7 @@ export function useAuth() {
   return context;
 }
 
-// 获取Supabase客户端（供其他hooks使用）
-export { supabase };
+// 获取Supabase客户端（供其他组件使用）
+export function supabase(): SupabaseClient | null {
+  return getSupabaseClient();
+}

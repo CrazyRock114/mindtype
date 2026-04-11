@@ -93,7 +93,7 @@ export function useAIChat({ mbtiType, onMessage }: UseAIChatOptions) {
                     return updated;
                   });
                 }
-              } catch (e) {
+              } catch {
                 // Ignore parse errors for partial chunks
               }
             }

@@ -134,63 +134,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [configured, setConfigured] = useState(false);
   const [usingLocalStorage, setUsingLocalStorage] = useState(false);
 
-  useEffect(() => {
-    const available = isSupabaseAvailable();
-    setConfigured(available);
-
-    if (!available) {
-      // 使用 LocalStorage 模式
-      setUsingLocalStorage(true);
-      const localUser = getLocalUser();
-      const localProfile = getLocalProfile();
-      if (localUser && localProfile) {
-        // 将本地用户转换为兼容格式
-        setUser({
-          id: localUser.id,
-          email: localUser.email,
-          aud: 'authenticated',
-          role: 'authenticated',
-          app_metadata: {},
-          user_metadata: { username: localUser.username },
-        } as unknown as User);
-        setProfile(localProfile);
-      }
-      setIsLoading(false);
-      return;
-    }
-
-    // Supabase 模式
-    const client = getSupabaseClient();
-    if (!client) {
-      setIsLoading(false);
-      return;
-    }
-
-    client.auth.getSession().then(({ data: { session: sess } }) => {
-      setSession(sess);
-      setUser(sess?.user ?? null);
-      if (sess?.user) {
-        void fetchProfileFromDB(client, sess.user.id);
-      }
-      setIsLoading(false);
-    });
-
-    const { data: { subscription } } = client.auth.onAuthStateChange(
-      async (event, sess) => {
-        setSession(sess);
-        setUser(sess?.user ?? null);
-        if (sess?.user) {
-          await fetchProfileFromDB(client, sess.user.id);
-        } else {
-          setProfile(null);
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  // 从数据库获取用户资料
+  // 从数据库获取用户资料（在 useEffect 之前声明，避免引用问题）
   const fetchProfileFromDB = useCallback(async (client: SupabaseClient, userId: string) => {
     try {
       const { data, error } = await client
@@ -247,6 +191,62 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('Error in fetchProfile:', error);
     }
   }, []);
+
+  useEffect(() => {
+    const available = isSupabaseAvailable();
+    setConfigured(available);
+
+    if (!available) {
+      // 使用 LocalStorage 模式
+      setUsingLocalStorage(true);
+      const localUser = getLocalUser();
+      const localProfile = getLocalProfile();
+      if (localUser && localProfile) {
+        // 将本地用户转换为兼容格式
+        setUser({
+          id: localUser.id,
+          email: localUser.email,
+          aud: 'authenticated',
+          role: 'authenticated',
+          app_metadata: {},
+          user_metadata: { username: localUser.username },
+        } as unknown as User);
+        setProfile(localProfile);
+      }
+      setIsLoading(false);
+      return;
+    }
+
+    // Supabase 模式
+    const client = getSupabaseClient();
+    if (!client) {
+      setIsLoading(false);
+      return;
+    }
+
+    client.auth.getSession().then(({ data: { session: sess } }) => {
+      setSession(sess);
+      setUser(sess?.user ?? null);
+      if (sess?.user) {
+        void fetchProfileFromDB(client, sess.user.id);
+      }
+      setIsLoading(false);
+    });
+
+    const { data: { subscription } } = client.auth.onAuthStateChange(
+      async (event, sess) => {
+        setSession(sess);
+        setUser(sess?.user ?? null);
+        if (sess?.user) {
+          await fetchProfileFromDB(client, sess.user.id);
+        } else {
+          setProfile(null);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, [fetchProfileFromDB]);
 
   const refreshProfile = useCallback(async () => {
     if (usingLocalStorage) {

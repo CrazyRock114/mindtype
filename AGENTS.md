@@ -125,11 +125,21 @@ src/
 
 ## 环境变量配置
 
+环境变量通过 `coze_workload_identity` SDK 自动获取，同时写入 `.env.local` 供 Next.js 开发服务器使用。
+
 ```bash
-# Supabase Configuration (必需)
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+# 服务端 + 客户端（NEXT_PUBLIC_ 前缀供浏览器访问）
+COZE_SUPABASE_URL=https://xxx.supabase2.aidap-global.cn-beijing.volces.com
+COZE_SUPABASE_ANON_KEY=eyJ...
+COZE_SUPABASE_SERVICE_ROLE_KEY=eyJ...
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase2.aidap-global.cn-beijing.volces.com
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 ```
+
+### Supabase 客户端
+
+- **服务端**: 使用 `src/storage/database/supabase-client.ts` 中的 `getSupabaseClient()`（支持 `coze_workload_identity` 自动加载环境变量）
+- **客户端**: 使用 `src/hooks/useAuth.tsx` 中的 `supabase()` 函数（延迟初始化，支持 LocalStorage Fallback）
 
 ## 数据库Schema (Supabase)
 

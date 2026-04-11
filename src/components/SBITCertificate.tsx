@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Download, Share2, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -15,6 +15,13 @@ interface SBITCertificateProps {
 export function SBITCertificate({ type, onReset }: SBITCertificateProps) {
   const [name, setName] = useState('');
   const [showShare, setShowShare] = useState(false);
+  const [certId, setCertId] = useState('');
+  const [certDate, setCertDate] = useState('');
+
+  useEffect(() => {
+    setCertId(Date.now().toString(36).toUpperCase());
+    setCertDate(new Date().toLocaleDateString('zh-CN'));
+  }, []);
 
   const handleDownload = () => {
     // In a real app, this would generate and download an image
@@ -93,8 +100,8 @@ export function SBITCertificate({ type, onReset }: SBITCertificateProps) {
         {/* Footer */}
         <div className="flex justify-between items-end mt-8 text-xs text-muted-foreground">
           <div>
-            <p>Certificate ID: SBTI-{Date.now().toString(36).toUpperCase()}</p>
-            <p>Date: {new Date().toLocaleDateString('zh-CN')}</p>
+            <p>Certificate ID: SBTI-{certId}</p>
+            <p>Date: {certDate}</p>
           </div>
           <div className="text-right">
             <p>官方认证</p>

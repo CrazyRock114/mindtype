@@ -18,6 +18,18 @@ function TestContent() {
     setMounted(true);
   }, []);
 
+  const handleSubmit = useCallback(() => {
+    // Fill unanswered with neutral (3)
+    const filledAnswers = state.answers.map(a => a ?? 3);
+    const result = calculateMBTI(filledAnswers);
+    setResult({
+      type: result.type,
+      dimensions: result.dimensions,
+      answers: filledAnswers,
+      timestamp: Date.now(),
+    });
+  }, [state.answers, setResult]);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -38,19 +50,7 @@ function TestContent() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [state.currentQuestion, state.answers, nextQuestion, prevQuestion, selectAnswer]);
-
-  const handleSubmit = useCallback(() => {
-    // Fill unanswered with neutral (3)
-    const filledAnswers = state.answers.map(a => a ?? 3);
-    const result = calculateMBTI(filledAnswers);
-    setResult({
-      type: result.type,
-      dimensions: result.dimensions,
-      answers: filledAnswers,
-      timestamp: Date.now(),
-    });
-  }, [state.answers, setResult]);
+  }, [state.currentQuestion, state.answers, nextQuestion, prevQuestion, selectAnswer, handleSubmit]);
 
   // Redirect to result when complete
   useEffect(() => {

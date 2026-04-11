@@ -2,11 +2,14 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X, Brain } from 'lucide-react';
+import { Menu, X, Brain, User, LogOut, Coins } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
 
 export function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, profile, isLoading, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +25,11 @@ export function NavBar() {
     { href: '/sbti', label: '趣味测试' },
     { href: '/industry', label: '行业专区' },
   ];
+
+  const handleSignOut = async () => {
+    await signOut();
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <nav
@@ -49,6 +57,38 @@ export function NavBar() {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-500 group-hover:w-full transition-all duration-300" />
             </Link>
           ))}
+
+          {/* Auth Section */}
+          <div className="flex items-center gap-3 ml-2 pl-4 border-l border-border">
+            {isLoading ? (
+              <div className="w-8 h-8 rounded-full bg-secondary animate-pulse" />
+            ) : user ? (
+              <>
+                <Link href="/profile">
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    <User className="w-4 h-4" />
+                    <span className="max-w-[80px] truncate">{profile?.username || '我的'}</span>
+                    {profile && profile.points > 0 && (
+                      <span className="flex items-center gap-0.5 text-xs text-amber-400">
+                        <Coins className="w-3 h-3" />
+                        {profile.points}
+                      </span>
+                    )}
+                  </Button>
+                </Link>
+                <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-muted-foreground">
+                  <LogOut className="w-4 h-4" />
+                </Button>
+              </>
+            ) : (
+              <Link href="/auth">
+                <Button size="sm" className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90">
+                  <User className="w-4 h-4 mr-1" />
+                  登录
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
@@ -79,6 +119,43 @@ export function NavBar() {
                 {link.label}
               </Link>
             ))}
+
+            <div className="border-t border-border pt-4">
+              {isLoading ? null : user ? (
+                <>
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-2 text-base text-muted-foreground hover:text-foreground transition-colors py-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <User className="w-4 h-4" />
+                    {profile?.username || '个人中心'}
+                    {profile && profile.points > 0 && (
+                      <span className="flex items-center gap-0.5 text-xs text-amber-400 ml-auto">
+                        <Coins className="w-3 h-3" />
+                        {profile.points}
+                      </span>
+                    )}
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center gap-2 text-base text-muted-foreground hover:text-foreground transition-colors py-2 w-full text-left"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    退出登录
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/auth"
+                  className="flex items-center gap-2 text-base text-purple-400 hover:text-purple-300 transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <User className="w-4 h-4" />
+                  登录 / 注册
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       )}

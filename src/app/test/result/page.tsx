@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Share2, RefreshCw, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Share2, RefreshCw, MessageCircle, Sparkles, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { AIResponse } from '@/components/AIResponse';
 import { ChatInterface } from '@/components/ChatInterface';
-import { mbtiTypes } from '@/lib/mbti-data';
+import { mbtiTypes, mbtiQuestions, calculateMBTI } from '@/lib/mbti-data';
 import { useAIChat } from '@/hooks/useAIChat';
 import { Suspense } from 'react';
 
@@ -17,73 +17,147 @@ function ResultContent() {
   const type = searchParams.get('type') || 'INTJ';
   const typeInfo = mbtiTypes[type] || mbtiTypes.INTJ;
 
+  // Try to restore test answers from localStorage for AI interpretation
+  const [savedAnswers, setSavedAnswers] = useState<number[] | null>(null);
+  const [savedDimensions, setSavedDimensions] = useState<{ EI: number; SN: number; TF: number; JP: number } | null>(null);
+  const [hasRealTest, setHasRealTest] = useState(false);
+
+  // AI interpretation state
   const [interpretation, setInterpretation] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'interpretation' | 'chat'>('interpretation');
+  const [isInterpreting, setIsInterpreting] = useState(false);
+  const [hasRequestedAI, setHasRequestedAI] = useState(false);
+  const [activeTab, setActiveTab] = useState<'info' | 'interpretation' | 'chat'>('info');
 
   const { messages, isLoading: isChatLoading, sendMessage, clearMessages } = useAIChat({ mbtiType: type });
 
-  // Fetch interpretation
+  // Load saved test data from localStorage
   useEffect(() => {
-    const fetchInterpretation = async () => {
-      setIsLoading(true);
-      setInterpretation('');
+    try {
+      const saved = localStorage.getItem('mbti_test_progress');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.result && parsed.result.type === type && parsed.result.answers) {
+          setSavedAnswers(parsed.result.answers);
+          setSavedDimensions(parsed.result.dimensions);
+          setHasRealTest(true);
+          return;
+        }
+      }
+      // Also check for completed test result
+      const resultSaved = localStorage.getItem('mbti_test_result');
+      if (resultSaved) {
+        const parsed = JSON.parse(resultSaved);
+        if (parsed.type === type && parsed.answers) {
+          setSavedAnswers(parsed.answers);
+          setSavedDimensions(parsed.dimensions);
+          setHasRealTest(true);
+          return;
+        }
+      }
+    } catch {
+      // Ignore
+    }
+  }, [type]);
 
-      try {
-        const response = await fetch('/api/mbti/interpret', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type,
-            dimensions: { EI: 50, SN: -30, TF: 70, JP: 40 }, // Default dimensions
-            answers: [],
-          }),
-        });
+  // Save test result for result page when coming from test
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('mbti_test_progress');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.result && parsed.result.type === type) {
+          localStorage.setItem('mbti_test_result', JSON.stringify(parsed.result));
+        }
+      }
+    } catch {
+      // Ignore
+    }
+  }, [type]);
 
-        if (!response.ok) throw new Error('Failed to fetch interpretation');
+  // Build answer summary for AI prompt
+  const buildAnswerSummary = useCallback((): string => {
+    if (!savedAnswers || savedAnswers.length === 0) return '';
 
-        const reader = response.body?.getReader();
-        if (!reader) throw new Error('No response body');
+    const lines: string[] = [];
+    mbtiQuestions.forEach((q, i) => {
+      const answer = savedAnswers[i];
+      if (answer !== undefined && answer !== null) {
+        const choice = answer >= 3 ? q.textA : q.textB;
+        const strength = answer === 3 ? '（中立偏' + (answer >= 3 ? 'A' : 'B') + '）' : answer >= 4 ? '（较强烈）' : '（非常强烈）';
+        lines.push(`Q${i + 1}: ${choice} ${strength}`);
+      }
+    });
+    return lines.join('\n');
+  }, [savedAnswers]);
 
-        const decoder = new TextDecoder();
-        let done = false;
+  // Fetch AI interpretation (only when user explicitly requests)
+  const fetchInterpretation = useCallback(async () => {
+    if (isInterpreting) return;
 
-        while (!done) {
-          const { value, done: doneReading } = await reader.read();
-          done = doneReading;
+    setHasRequestedAI(true);
+    setIsInterpreting(true);
+    setInterpretation('');
+    setActiveTab('interpretation');
 
-          if (value) {
-            const chunk = decoder.decode(value, { stream: !done });
-            const lines = chunk.split('\n');
+    try {
+      // Use real dimensions if available, otherwise fallback
+      const dimensions = savedDimensions || calculateMBTI(Array(28).fill(3)).dimensions;
 
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const data = line.slice(6);
-                if (data === '[DONE]') {
-                  continue;
+      // Build answer details
+      const answerSummary = buildAnswerSummary();
+
+      const response = await fetch('/api/mbti/interpret', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type,
+          dimensions,
+          answers: savedAnswers || [],
+          answerSummary,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch interpretation');
+
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('No response body');
+
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+
+        if (value) {
+          const chunk = decoder.decode(value, { stream: !done });
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              if (data === '[DONE]') {
+                continue;
+              }
+              try {
+                const parsed = JSON.parse(data);
+                if (parsed.content) {
+                  setInterpretation(prev => prev + parsed.content);
                 }
-                try {
-                  const parsed = JSON.parse(data);
-                  if (parsed.content) {
-                    setInterpretation(prev => prev + parsed.content);
-                  }
-                } catch (e) {
-                  // Ignore parse errors
-                }
+              } catch {
+                // Ignore parse errors
               }
             }
           }
         }
-      } catch (error) {
-        console.error('Interpretation error:', error);
-        setInterpretation('抱歉，AI解读生成失败。请稍后再试。');
-      } finally {
-        setIsLoading(false);
       }
-    };
-
-    fetchInterpretation();
-  }, [type]);
+    } catch (error) {
+      console.error('Interpretation error:', error);
+      setInterpretation('抱歉，AI解读生成失败。请稍后再试。');
+    } finally {
+      setIsInterpreting(false);
+    }
+  }, [type, savedAnswers, savedDimensions, isInterpreting, buildAnswerSummary]);
 
   const handleShare = () => {
     if (navigator.share) {
@@ -97,6 +171,15 @@ function ResultContent() {
       alert('链接已复制到剪贴板！');
     }
   };
+
+  // Dimension display
+  const dimensions = savedDimensions || { EI: 0, SN: 0, TF: 0, JP: 0 };
+  const dimensionLabels = [
+    { key: 'EI', left: '外向(E)', right: '内向(I)', value: dimensions.EI },
+    { key: 'SN', left: '实感(S)', right: '直觉(N)', value: dimensions.SN },
+    { key: 'TF', left: '思考(T)', right: '情感(F)', value: dimensions.TF },
+    { key: 'JP', left: '判断(J)', right: '知觉(P)', value: dimensions.JP },
+  ];
 
   return (
     <div className="min-h-screen py-24 px-6">
@@ -135,29 +218,86 @@ function ResultContent() {
             {typeInfo.description}
           </p>
 
+          {/* Source indicator */}
+          {hasRealTest ? (
+            <div className="inline-flex items-center gap-1.5 mt-4 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-xs text-green-400">
+              <span className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+              基于你的28道测试题目结果
+            </div>
+          ) : (
+            <div className="inline-flex items-center gap-1.5 mt-4 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs text-amber-400">
+              <BookOpen className="w-3 h-3" />
+              类型概览（未完成测试）
+            </div>
+          )}
+
           {/* Actions */}
           <div className="flex gap-4 justify-center mt-8">
+            {!hasRealTest && (
+              <Link href="/test">
+                <Button className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90">
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  完成测试获取专属解读
+                </Button>
+              </Link>
+            )}
             <Button variant="outline" onClick={handleShare}>
               <Share2 className="w-4 h-4 mr-2" />
               分享结果
             </Button>
-            <Link href="/test">
-              <Button variant="outline">
-                <RefreshCw className="w-4 h-4 mr-2" />
-                重新测试
-              </Button>
-            </Link>
+            {hasRealTest && (
+              <Link href="/test">
+                <Button variant="outline">
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  重新测试
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
 
+        {/* Dimension Bars */}
+        <Card className="p-6 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-8">
+          <h3 className="font-bold mb-6">维度分析</h3>
+          <div className="space-y-5">
+            {dimensionLabels.map((dim) => {
+              const percentage = Math.abs(dim.value);
+              const isLeft = dim.value > 0;
+              return (
+                <div key={dim.key}>
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className={isLeft ? 'text-foreground font-medium' : 'text-muted-foreground'}>
+                      {dim.left}
+                    </span>
+                    <span className="text-xs text-muted-foreground">{percentage}%</span>
+                    <span className={!isLeft ? 'text-foreground font-medium' : 'text-muted-foreground'}>
+                      {dim.right}
+                    </span>
+                  </div>
+                  <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-1000 ${
+                        isLeft
+                          ? 'bg-gradient-to-r from-purple-500 to-cyan-500 float-left'
+                          : 'bg-gradient-to-l from-cyan-500 to-purple-500 float-right'
+                      }`}
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+
         {/* Traits */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
           <Card className="p-6 bg-green-500/5 border-green-500/20">
             <h3 className="font-bold text-green-400 mb-4">性格优势</h3>
             <ul className="space-y-2">
               {typeInfo.strengths.map((strength, i) => (
                 <li key={i} className="flex items-center gap-2 text-sm">
-                  <span className="text-green-500">✓</span>
+                  <span className="text-green-500">&#10003;</span>
                   {strength}
                 </li>
               ))}
@@ -176,58 +316,8 @@ function ResultContent() {
           </Card>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6 border-b border-border">
-          <button
-            onClick={() => setActiveTab('interpretation')}
-            className={`px-4 py-2 text-sm font-medium transition-colors relative ${
-              activeTab === 'interpretation' ? 'text-purple-400' : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            AI 深度解读
-            {activeTab === 'interpretation' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-500" />
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab('chat')}
-            className={`px-4 py-2 text-sm font-medium transition-colors relative ${
-              activeTab === 'chat' ? 'text-purple-400' : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <MessageCircle className="w-4 h-4 inline mr-1" />
-            AI 对话
-            {activeTab === 'chat' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-500" />
-            )}
-          </button>
-        </div>
-
-        {/* Tab Content */}
-        {activeTab === 'interpretation' ? (
-          <Card className="p-6 bg-card/60 backdrop-blur-sm border-purple-500/20">
-            <AIResponse
-              content={interpretation}
-              isLoading={isLoading}
-              onRetry={() => {
-                setInterpretation('');
-                window.location.reload();
-              }}
-            />
-          </Card>
-        ) : (
-          <Card className="p-4 bg-card/60 backdrop-blur-sm border-purple-500/20 h-[500px]">
-            <ChatInterface
-              messages={messages}
-              onSend={sendMessage}
-              onClear={clearMessages}
-              isLoading={isChatLoading}
-            />
-          </Card>
-        )}
-
         {/* Career Section */}
-        <div className="mt-12">
+        <div className="mb-8">
           <h2 className="text-2xl font-bold mb-6">适合的职业方向</h2>
           <div className="flex flex-wrap gap-3">
             {typeInfo.careers.map((career, i) => (
@@ -242,12 +332,97 @@ function ResultContent() {
         </div>
 
         {/* Relationship */}
-        <Card className="mt-8 p-6 bg-card/60 backdrop-blur-sm border-purple-500/20">
+        <Card className="p-6 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-8">
           <h3 className="font-bold mb-4">人际关系模式</h3>
           <p className="text-muted-foreground leading-relaxed">
             {typeInfo.relationships}
           </p>
         </Card>
+
+        {/* AI Deep Interpretation Section */}
+        <div className="mt-12 border-t border-border pt-12">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-3">AI 深度解读</h2>
+            <p className="text-muted-foreground">
+              {hasRealTest
+                ? '基于你28道题目的具体选择，AI为你生成专属性格分析'
+                : '完成MBTI测试后，AI将根据你的具体选择生成深度解读'}
+            </p>
+          </div>
+
+          {!hasRequestedAI ? (
+            <div className="text-center">
+              <Button
+                size="lg"
+                onClick={fetchInterpretation}
+                disabled={!hasRealTest}
+                className={`px-8 py-6 text-lg ${
+                  hasRealTest
+                    ? 'bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90'
+                    : ''
+                }`}
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                {hasRealTest ? '获取AI深度解读' : '请先完成测试'}
+              </Button>
+              {hasRealTest && (
+                <p className="text-xs text-muted-foreground mt-3">
+                  解读将基于你每道题的具体选择生成，约需10-20秒
+                </p>
+              )}
+            </div>
+          ) : (
+            <>
+              {/* Tabs for interpretation and chat */}
+              <div className="flex gap-2 mb-6 border-b border-border">
+                <button
+                  onClick={() => setActiveTab('interpretation')}
+                  className={`px-4 py-2 text-sm font-medium transition-colors relative ${
+                    activeTab === 'interpretation' ? 'text-purple-400' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4 inline mr-1" />
+                  AI 解读
+                  {activeTab === 'interpretation' && (
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-500" />
+                  )}
+                </button>
+                <button
+                  onClick={() => setActiveTab('chat')}
+                  className={`px-4 py-2 text-sm font-medium transition-colors relative ${
+                    activeTab === 'chat' ? 'text-purple-400' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <MessageCircle className="w-4 h-4 inline mr-1" />
+                  AI 对话
+                  {activeTab === 'chat' && (
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-500" />
+                  )}
+                </button>
+              </div>
+
+              {/* Tab Content */}
+              {activeTab === 'interpretation' ? (
+                <Card className="p-6 bg-card/60 backdrop-blur-sm border-purple-500/20">
+                  <AIResponse
+                    content={interpretation}
+                    isLoading={isInterpreting}
+                    onRetry={fetchInterpretation}
+                  />
+                </Card>
+              ) : (
+                <Card className="p-4 bg-card/60 backdrop-blur-sm border-purple-500/20 h-[500px]">
+                  <ChatInterface
+                    messages={messages}
+                    onSend={sendMessage}
+                    onClear={clearMessages}
+                    isLoading={isChatLoading}
+                  />
+                </Card>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

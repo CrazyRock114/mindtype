@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -11,29 +11,41 @@ interface AIResponseProps {
 }
 
 export function AIResponse({ content, isLoading, onRetry }: AIResponseProps) {
-  const [displayedContent, setDisplayedContent] = useState('');
+  const [displayedLength, setDisplayedLength] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [copied, setCopied] = useState(false);
+  const prevContentRef = useRef('');
+  const animFrameRef = useRef<number>(0);
 
+  // Stream content directly: display length tracks content length with a small lag for typewriter effect
   useEffect(() => {
+    // If content was reset (e.g. new request), reset display
+    if (content.length < prevContentRef.current.length) {
+      setDisplayedLength(0);
+      setIsComplete(false);
+    }
+    prevContentRef.current = content;
+
     if (!content) return;
 
-    setDisplayedContent('');
-    setIsComplete(false);
+    // If we're still streaming (isLoading), just show content directly with cursor
+    // No typewriter delay during streaming — that causes the flicker
+    if (isLoading) {
+      setDisplayedLength(content.length);
+      setIsComplete(false);
+      return;
+    }
 
-    let index = 0;
-    const timer = setInterval(() => {
-      if (index < content.length) {
-        setDisplayedContent(content.substring(0, index + 1));
-        index++;
-      } else {
-        setIsComplete(true);
-        clearInterval(timer);
+    // Once loading is done, ensure full content is displayed
+    setIsComplete(true);
+    setDisplayedLength(content.length);
+
+    return () => {
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
       }
-    }, 20);
-
-    return () => clearInterval(timer);
-  }, [content]);
+    };
+  }, [content, isLoading]);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(content);
@@ -41,7 +53,7 @@ export function AIResponse({ content, isLoading, onRetry }: AIResponseProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (isLoading && !displayedContent) {
+  if (isLoading && !content) {
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-3 text-muted-foreground">
@@ -57,6 +69,8 @@ export function AIResponse({ content, isLoading, onRetry }: AIResponseProps) {
       </div>
     );
   }
+
+  const shownContent = content.substring(0, displayedLength);
 
   return (
     <div className="space-y-4">
@@ -90,12 +104,12 @@ export function AIResponse({ content, isLoading, onRetry }: AIResponseProps) {
       {/* Content */}
       <div className="bg-secondary/50 rounded-xl p-6 border border-border">
         <div className="prose prose-invert max-w-none">
-          <p className="whitespace-pre-wrap leading-relaxed">
-            {displayedContent}
-            {!isComplete && (
+          <div className="whitespace-pre-wrap leading-relaxed">
+            {shownContent}
+            {!isComplete && displayedLength > 0 && (
               <span className="inline-block w-2 h-5 bg-purple-500 ml-1 animate-typing-cursor" />
             )}
-          </p>
+          </div>
         </div>
       </div>
     </div>

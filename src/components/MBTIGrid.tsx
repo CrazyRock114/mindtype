@@ -5,7 +5,6 @@ import { Card } from '@/components/ui/card';
 import Link from 'next/link';
 
 export function MBTIGrid() {
-  const types = Object.values(mbtiTypes);
   const rows = [
     ['INTJ', 'INTP', 'ENTJ', 'ENTP'],
     ['INFJ', 'INFP', 'ENFJ', 'ENFP'],
@@ -15,7 +14,7 @@ export function MBTIGrid() {
 
   return (
     <div className="grid grid-cols-4 gap-3 md:gap-4">
-      {rows.map((row, rowIndex) => (
+      {rows.map((row) =>
         row.map((type) => {
           const info = mbtiTypes[type];
           return (
@@ -46,7 +45,7 @@ export function MBTIGrid() {
             </Link>
           );
         })
-      ))}
+      )}
     </div>
   );
 }

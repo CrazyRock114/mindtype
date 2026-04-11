@@ -55,6 +55,8 @@ function TestContent() {
   // Redirect to result when complete
   useEffect(() => {
     if (state.isComplete && state.result) {
+      // Save test result to localStorage for result page to read
+      localStorage.setItem('mbti_test_result', JSON.stringify(state.result));
       router.push(`/test/result?type=${state.result.type}`);
     }
   }, [state.isComplete, state.result, router]);

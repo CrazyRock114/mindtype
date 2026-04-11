@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -16,6 +16,7 @@ export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -23,9 +24,39 @@ export default function AuthPage() {
     username: '',
   });
 
+  // 前端表单校验
+  const validateForm = (): string | null => {
+    if (!formData.email.trim()) {
+      return '请输入邮箱地址';
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      return '邮箱格式不正确，请检查后重试';
+    }
+    if (!formData.password) {
+      return '请输入密码';
+    }
+    if (formData.password.length < 6) {
+      return '密码长度不能少于6位';
+    }
+    if (!isLogin && !formData.username.trim()) {
+      return '请输入用户名';
+    }
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
+
+    // 前端校验
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -34,26 +65,30 @@ export default function AuthPage() {
         if (error) {
           setError(error.message);
         } else {
-          router.push('/');
+          setSuccess('登录成功，正在跳转...');
+          setTimeout(() => router.push('/'), 500);
         }
       } else {
-        if (!formData.username.trim()) {
-          setError('请输入用户名');
-          setIsLoading(false);
-          return;
-        }
         const { error } = await signUp(formData.email, formData.password, formData.username);
         if (error) {
           setError(error.message);
         } else {
-          router.push('/');
+          setSuccess('注册成功，正在跳转...');
+          setTimeout(() => router.push('/'), 500);
         }
       }
-    } catch (err) {
+    } catch {
       setError('操作失败，请稍后重试');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // 切换登录/注册时清除状态
+  const handleTabSwitch = (login: boolean) => {
+    setIsLogin(login);
+    setError(null);
+    setSuccess(null);
   };
 
   return (
@@ -84,7 +119,7 @@ export default function AuthPage() {
           )}
           <div className="flex mb-8 bg-secondary rounded-lg p-1">
             <button
-              onClick={() => setIsLogin(true)}
+              onClick={() => handleTabSwitch(true)}
               className={`flex-1 py-2 rounded-md text-sm font-medium transition-colors ${
                 isLogin ? 'bg-purple-500 text-white' : 'text-muted-foreground hover:text-foreground'
               }`}
@@ -92,7 +127,7 @@ export default function AuthPage() {
               登录
             </button>
             <button
-              onClick={() => setIsLogin(false)}
+              onClick={() => handleTabSwitch(false)}
               className={`flex-1 py-2 rounded-md text-sm font-medium transition-colors ${
                 !isLogin ? 'bg-purple-500 text-white' : 'text-muted-foreground hover:text-foreground'
               }`}
@@ -101,9 +136,19 @@ export default function AuthPage() {
             </button>
           </div>
 
+          {/* Error Message */}
           {error && (
-            <div className="mb-6 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-sm text-destructive">
-              {error}
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-sm text-red-400 flex items-start gap-3 animate-in fade-in slide-in-from-top-1 duration-300">
+              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-sm text-green-400 flex items-start gap-3 animate-in fade-in slide-in-from-top-1 duration-300">
+              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              <span>{success}</span>
             </div>
           )}
 
@@ -132,9 +177,8 @@ export default function AuthPage() {
                   type="email"
                   placeholder="your@email.com"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) => { setFormData({ ...formData, email: e.target.value }); if (error) setError(null); }}
                   className="pl-10"
-                  required
                 />
               </div>
             </div>
@@ -147,9 +191,8 @@ export default function AuthPage() {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) => { setFormData({ ...formData, password: e.target.value }); if (error) setError(null); }}
                   className="pl-10 pr-10"
-                  required
                   minLength={6}
                 />
                 <button
@@ -160,6 +203,7 @@ export default function AuthPage() {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              <p className="text-xs text-muted-foreground">密码至少6位</p>
             </div>
 
             {isLogin && (
@@ -175,7 +219,15 @@ export default function AuthPage() {
               className="w-full bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90"
               disabled={isLoading}
             >
-              {isLoading ? '处理中...' : (isLogin ? '登录' : '注册')}
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  处理中...
+                </span>
+              ) : (isLogin ? '登录' : '注册')}
             </Button>
           </form>
 

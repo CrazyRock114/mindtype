@@ -263,11 +263,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [user, usingLocalStorage, fetchProfileFromDB]);
 
+  // ============ 翻译 Supabase 错误消息 ============
+  const translateErrorMessage = (err: Error | null): Error | null => {
+    if (!err) return null;
+    const msg = err.message || '';
+    const lowerMsg = msg.toLowerCase();
+
+    const errorMap: Record<string, string> = {
+      'invalid login credentials': '邮箱或密码错误，请检查后重试',
+      'invalid credentials': '邮箱或密码错误，请检查后重试',
+      'email not confirmed': '邮箱尚未验证，请查收验证邮件后重试',
+      'user already registered': '该邮箱已被注册，请直接登录',
+      'password should be at least': '密码长度不能少于6位',
+      'unable to validate email address': '邮箱格式不正确，请检查后重试',
+      'signup is disabled': '注册功能暂未开放',
+      'email rate limit exceeded': '请求过于频繁，请稍后再试',
+      'request timeout': '请求超时，请检查网络后重试',
+      'network requestfailed': '网络连接失败，请检查网络后重试',
+      'too many requests': '请求过于频繁，请稍后再试',
+      'user not found': '该账号不存在，请检查邮箱或先注册',
+      'session not found': '会话已过期，请重新登录',
+    };
+
+    for (const [key, value] of Object.entries(errorMap)) {
+      if (lowerMsg.includes(key)) {
+        return new Error(value);
+      }
+    }
+
+    // 如果没有匹配到已知的错误类型，返回通用中文提示
+    return new Error(msg || '操作失败，请稍后重试');
+  };
+
   // ============ 注册 ============
   const signUp = async (email: string, password: string, username: string) => {
     if (usingLocalStorage) {
       // LocalStorage 模式的注册
       try {
+        // 检查是否已存在该邮箱的用户
+        const existingUser = getLocalUser();
+        if (existingUser && existingUser.email === email) {
+          return { error: new Error('该邮箱已被注册，请直接登录') };
+        }
+
         const id = `local_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
         const now = new Date().toISOString();
 
@@ -283,6 +321,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           consecutiveCheckins: 0,
           lastCheckinDate: null,
         };
+
+        // 同时保存密码哈希用于登录验证（简易方式）
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('mindtype_local_password', password);
+        }
 
         saveLocalUser(newUser);
         saveLocalProfile(newProfile);
@@ -314,35 +357,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password,
         options: { data: { username } },
       });
-      return { error };
+      return { error: translateErrorMessage(error) };
     } catch (error) {
-      return { error: error as Error };
+      return { error: translateErrorMessage(error as Error) };
     }
   };
 
   // ============ 登录 ============
   const signIn = async (email: string, password: string) => {
     if (usingLocalStorage) {
-      // LocalStorage 模式的登录：查找已注册的用户
+      // LocalStorage 模式的登录：验证邮箱和密码
       try {
         const existingUser = getLocalUser();
-        if (existingUser && existingUser.email === email) {
-          const existingProfile = getLocalProfile();
-          if (existingProfile) {
-            setUser({
-              id: existingUser.id,
-              email: existingUser.email,
-              aud: 'authenticated',
-              role: 'authenticated',
-              app_metadata: {},
-              user_metadata: { username: existingUser.username },
-            } as unknown as User);
-            setProfile(existingProfile);
-            return { error: null };
+        if (!existingUser || existingUser.email !== email) {
+          return { error: new Error('该账号不存在，请检查邮箱或先注册') };
+        }
+
+        // 验证密码
+        if (typeof window !== 'undefined') {
+          const savedPassword = localStorage.getItem('mindtype_local_password');
+          if (savedPassword !== null && savedPassword !== password) {
+            return { error: new Error('密码错误，请检查后重试') };
           }
         }
-        // 如果用户不存在，自动注册
-        return signUp(email, password, email.split('@')[0]);
+
+        const existingProfile = getLocalProfile();
+        if (existingProfile) {
+          setUser({
+            id: existingUser.id,
+            email: existingUser.email,
+            aud: 'authenticated',
+            role: 'authenticated',
+            app_metadata: {},
+            user_metadata: { username: existingUser.username },
+          } as unknown as User);
+          setProfile(existingProfile);
+          return { error: null };
+        }
+        return { error: new Error('登录失败，请稍后重试') };
       } catch (e) {
         return { error: e instanceof Error ? e : new Error(String(e)) };
       }
@@ -355,9 +407,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       const { error } = await client.auth.signInWithPassword({ email, password });
-      return { error };
+      return { error: translateErrorMessage(error) };
     } catch (error) {
-      return { error: error as Error };
+      return { error: translateErrorMessage(error as Error) };
     }
   };
 

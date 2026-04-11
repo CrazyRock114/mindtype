@@ -93,15 +93,24 @@ export function QuestionCard({
 
         {/* Selection Options */}
         <div className="relative">
-          {/* Slider Track */}
-          <div className="absolute top-1/2 left-0 right-0 h-2 -translate-y-1/2 bg-secondary rounded-full" />
-          <div
-            className="absolute top-1/2 left-1/2 h-2 -translate-y-1/2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full transition-all duration-300"
-            style={{
-              width: selectedValue !== null ? `${Math.abs(selectedValue - 3) * 25}%` : '0%',
-              left: selectedValue !== null && selectedValue < 3 ? `${selectedValue * 25 + 12.5}%` : '50%'
-            }}
-          />
+          {/* Slider Track container - aligned from button 1 center to button 5 center */}
+          <div className="absolute top-1/2 left-7 right-7 h-2 -translate-y-1/2 overflow-hidden">
+            {/* Background track */}
+            <div className="absolute inset-0 bg-secondary rounded-full" />
+            {/* Colored fill - from center (50%) to selected button position */}
+            {selectedValue !== null && selectedValue !== 3 && (
+              <div
+                className="absolute h-full rounded-full transition-all duration-300"
+                style={{
+                  left: selectedValue < 3 ? `${(selectedValue - 1) / 4 * 100}%` : '50%',
+                  width: `${Math.abs(selectedValue - 3) / 4 * 100}%`,
+                  background: selectedValue < 3
+                    ? 'linear-gradient(to right, #8b5cf6, #a78bfa)'
+                    : 'linear-gradient(to right, #67e8f9, #06b6d4)',
+                }}
+              />
+            )}
+          </div>
 
           {/* Selection Buttons */}
           <div className="relative flex justify-between items-center">

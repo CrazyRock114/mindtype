@@ -1,9 +1,17 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { NavBar } from "@/components/NavBar";
 import { StarBackground } from "@/components/StarBackground";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/useAuth";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "MindType - AI驱动的MBTI性格测试",
@@ -24,12 +32,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="dark">
-      <body className="min-h-screen antialiased overflow-x-hidden">
+    <html lang="zh-CN" className="dark" suppressHydrationWarning>
+      <body className="min-h-screen antialiased overflow-x-hidden w-full">
         <AuthProvider>
           <StarBackground />
           <NavBar />
-          <main className="relative z-10 pb-tab-bar md:pb-0 pt-0 md:pt-0">
+          <main className="relative z-10 w-full pb-tab-bar md:pb-0">
             {children}
           </main>
           <Toaster position="top-center" />

@@ -15,10 +15,10 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full overflow-x-hidden">
       {/* Hero Section - Mobile-first compact */}
-      <section className="relative min-h-[100dvh] flex items-center justify-center px-4 md:px-6 pt-16 md:pt-0">
-        {/* Gradient Orbs - smaller on mobile */}
+      <section className="relative min-h-[100dvh] flex items-center justify-center px-4 md:px-6 pt-16 md:pt-0 overflow-hidden">
+        {/* Gradient Orbs - smaller on mobile, contained */}
         <div className="absolute top-1/4 left-1/4 w-48 md:w-96 h-48 md:h-96 bg-purple-500/20 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-1/4 right-1/4 w-48 md:w-96 h-48 md:h-96 bg-cyan-500/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
 

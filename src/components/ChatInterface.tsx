@@ -64,13 +64,13 @@ export function ChatInterface({ messages, onSend, onClear, isLoading }: ChatInte
             <p className="text-muted-foreground mb-6">
               有什么想了解的？试试这些快捷问题
             </p>
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-1.5 md:gap-2">
               {presetQuestions.map((q) => (
                 <button
                   key={q.text}
                   onClick={() => handlePresetClick(q.text)}
                   disabled={isLoading}
-                  className="px-4 py-2 bg-secondary/50 rounded-full text-sm hover:bg-secondary transition-colors disabled:opacity-50"
+                  className="px-2.5 py-1.5 md:px-4 md:py-2 bg-secondary/50 rounded-full text-xs md:text-sm hover:bg-secondary transition-colors disabled:opacity-50 whitespace-nowrap"
                 >
                   {q.icon} {q.text}
                 </button>

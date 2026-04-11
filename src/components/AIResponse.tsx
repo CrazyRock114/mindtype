@@ -102,9 +102,9 @@ export function AIResponse({ content, isLoading, onRetry }: AIResponseProps) {
       </div>
 
       {/* Content */}
-      <div className="bg-secondary/50 rounded-xl p-6 border border-border">
+      <div className="bg-secondary/50 rounded-xl p-4 md:p-6 border border-border overflow-hidden">
         <div className="prose prose-invert max-w-none">
-          <div className="whitespace-pre-wrap leading-relaxed">
+          <div className="whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere">
             {shownContent}
             {!isComplete && displayedLength > 0 && (
               <span className="inline-block w-2 h-5 bg-purple-500 ml-1 animate-typing-cursor" />

@@ -71,8 +71,7 @@ function TestContent() {
   const answeredCount = state.answers.filter(a => a !== null).length;
 
   return (
-    <div className="min-h-screen px-4 md:px-6 pt-4 md:pt-24">
-      {/* Header - compact on mobile, hidden back button since bottom tab provides navigation */}
+    <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24">      {/* Header - compact on mobile, hidden back button since bottom tab provides navigation */}
       <div className="max-w-2xl mx-auto mb-4 md:mb-12">
         <div className="hidden md:block">
           <Button variant="ghost" className="mb-8 -ml-4" onClick={() => router.push('/')}>

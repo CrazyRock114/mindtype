@@ -50,7 +50,7 @@ export default function SBTIPage() {
   const currentQ = sbtiQuestions[currentQuestion];
 
   return (
-    <div className="min-h-screen px-4 md:px-6 pt-4 md:pt-24">
+    <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24">
       <div className="max-w-2xl mx-auto">
         {/* Header - hidden on mobile (bottom tab) */}
         <div className="hidden md:block">

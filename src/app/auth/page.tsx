@@ -11,7 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 export default function AuthPage() {
   const router = useRouter();
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, isUsingLocalStorage } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,6 +77,11 @@ export default function AuthPage() {
           </div>
 
           {/* Tab Switch */}
+          {isUsingLocalStorage && (
+            <div className="mb-6 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-sm text-amber-400">
+              当前为演示模式（数据保存在本地浏览器），注册/登录功能可正常使用。
+            </div>
+          )}
           <div className="flex mb-8 bg-secondary rounded-lg p-1">
             <button
               onClick={() => setIsLogin(true)}

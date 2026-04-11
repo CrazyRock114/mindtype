@@ -3,6 +3,7 @@ import "./globals.css";
 import { NavBar } from "@/components/NavBar";
 import { StarBackground } from "@/components/StarBackground";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/hooks/useAuth";
 
 export const metadata: Metadata = {
   title: "MindType - AI驱动的MBTI性格测试",
@@ -24,17 +25,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" className="dark">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.cn" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      </head>
       <body className="min-h-screen antialiased overflow-x-hidden">
-        <StarBackground />
-        <NavBar />
-        <main className="relative z-10">
-          {children}
-        </main>
-        <Toaster position="top-center" />
+        <AuthProvider>
+          <StarBackground />
+          <NavBar />
+          <main className="relative z-10">
+            {children}
+          </main>
+          <Toaster position="top-center" />
+        </AuthProvider>
       </body>
     </html>
   );

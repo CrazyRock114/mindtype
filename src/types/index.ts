@@ -65,4 +65,5 @@ export interface Industry {
   popularTypes: string[];
   features: string[];
   comingSoon?: boolean;
+  hotRank?: number;
 }

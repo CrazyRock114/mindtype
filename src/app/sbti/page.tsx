@@ -14,18 +14,6 @@ export default function SBTIPage() {
   const [isComplete, setIsComplete] = useState(false);
   const [resultType, setResultType] = useState<string | null>(null);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isComplete) return;
-      if (e.key >= '1' && e.key <= '4') {
-        handleSelect(parseInt(e.key) - 1);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentQuestion, isComplete]);
-
   const handleSelect = useCallback((optionIndex: number) => {
     const newAnswers = [...answers, optionIndex];
     setAnswers(newAnswers);
@@ -38,6 +26,18 @@ export default function SBTIPage() {
       setIsComplete(true);
     }
   }, [answers, currentQuestion]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isComplete) return;
+      if (e.key >= '1' && e.key <= '4') {
+        handleSelect(parseInt(e.key) - 1);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentQuestion, isComplete, handleSelect]);
 
   const handleReset = () => {
     setCurrentQuestion(0);

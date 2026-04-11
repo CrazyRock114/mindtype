@@ -13,21 +13,21 @@ export function MBTIGrid() {
   ];
 
   return (
-    <div className="grid grid-cols-4 gap-3 md:gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-4">
       {rows.map((row) =>
         row.map((type) => {
           const info = mbtiTypes[type];
           return (
             <Link key={type} href={`/test/result?type=${type}`}>
               <Card
-                className="group p-3 md:p-4 bg-card/40 hover:bg-card/80 border-purple-500/10 hover:border-purple-500/30 transition-all duration-300 cursor-pointer hover:scale-105"
+                className="group p-2.5 sm:p-3 md:p-4 bg-card/40 hover:bg-card/80 border-purple-500/10 hover:border-purple-500/30 transition-all duration-300 cursor-pointer active:scale-95 hover:scale-105"
               >
                 <div className="text-center">
                   <div className="flex justify-center gap-0.5 mb-1">
                     {type.split('').map((letter, i) => (
                       <span
                         key={i}
-                        className={`text-lg md:text-xl font-bold ${
+                        className={`text-base sm:text-lg md:text-xl font-bold ${
                           i === 0 ? 'type-E' :
                           i === 1 ? 'type-I' :
                           i === 2 ? 'type-T' : 'type-P'
@@ -37,7 +37,7 @@ export function MBTIGrid() {
                       </span>
                     ))}
                   </div>
-                  <p className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
+                  <p className="text-[10px] sm:text-xs text-muted-foreground group-hover:text-foreground transition-colors truncate">
                     {info.name}
                   </p>
                 </div>

@@ -100,31 +100,52 @@
 
 * {
   border-color: var(--border);
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  /* Safe area for notched phones */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* Prevent overscroll bounce on iOS */
+  overscroll-behavior-y: none;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Mobile: hide scrollbar for cleaner feel; Desktop: custom scrollbar */
+@supports not (selector(:has(*))) {
+  /* Fallback for older browsers */
 }
 
-::-webkit-scrollbar-track {
-  background: var(--background);
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  * {
+    scrollbar-width: none;
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 4px;
-}
+@media (min-width: 769px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-purple);
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-purple);
+  }
 }
 
 /* Selection color */
@@ -332,4 +353,44 @@ html {
   color: var(--foreground);
   border-radius: 18px 18px 18px 4px;
   border: 1px solid var(--border);
+}
+
+/* ============ Mobile-first Utilities ============ */
+
+/* Bottom tab bar safe area padding */
+.pb-tab-bar {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* Mobile touch-friendly minimum tap target */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Bottom tab bar */
+.mobile-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Prevent text selection on interactive elements on mobile */
+@media (max-width: 768px) {
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float,
+    .animate-twinkle,
+    .animate-pulse-glow {
+      animation: none;
+    }
+  }
 }

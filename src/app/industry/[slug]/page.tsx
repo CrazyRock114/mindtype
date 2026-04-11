@@ -213,72 +213,74 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
   // 未登录用户的注册引导
   if (!isLoading && !user) {
     return (
-      <div className="min-h-screen py-24 px-6">
+      <div className="min-h-screen px-4 md:px-6 pt-4 md:pt-24">
         <div className="max-w-4xl mx-auto">
-          <Link href="/industry">
-            <Button variant="ghost" className="mb-8 -ml-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              返回行业专区
-            </Button>
-          </Link>
+          <div className="hidden md:block">
+            <Link href="/industry">
+              <Button variant="ghost" className="mb-8 -ml-4">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                返回行业专区
+              </Button>
+            </Link>
+          </div>
 
           {/* Industry Hero */}
-          <div className="text-center mb-12">
-            <div className="text-6xl mb-4">{industry.icon}</div>
-            <h1 className="text-4xl font-bold mb-2">{industry.name}</h1>
-            <p className="text-muted-foreground">{industry.nameEn}</p>
+          <div className="text-center mb-6 md:mb-12">
+            <div className="text-4xl md:text-6xl mb-3 md:mb-4">{industry.icon}</div>
+            <h1 className="text-2xl md:text-4xl font-bold mb-1 md:mb-2">{industry.name}</h1>
+            <p className="text-xs md:text-sm text-muted-foreground">{industry.nameEn}</p>
             {industry.hotRank && industry.hotRank <= 10 && (
-              <Badge className="mt-4 bg-gradient-to-r from-amber-500 to-orange-500">
+              <Badge className="mt-2 md:mt-4 bg-gradient-to-r from-amber-500 to-orange-500">
                 热门行业 TOP {industry.hotRank}
               </Badge>
             )}
           </div>
 
           {/* Description */}
-          <Card className="p-8 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-8">
-            <h2 className="text-xl font-bold mb-4">行业概述</h2>
-            <p className="text-muted-foreground leading-relaxed">{industry.description}</p>
+          <Card className="p-4 md:p-8 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-4 md:mb-8">
+            <h2 className="text-base md:text-xl font-bold mb-2 md:mb-4">行业概述</h2>
+            <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{industry.description}</p>
           </Card>
 
           {/* Popular Types */}
-          <Card className="p-8 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-8">
-            <div className="flex items-center gap-2 mb-6">
-              <Users className="w-5 h-5 text-purple-400" />
-              <h2 className="text-xl font-bold">热门人格类型</h2>
+          <Card className="p-4 md:p-8 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-4 md:mb-8">
+            <div className="flex items-center gap-2 mb-4 md:mb-6">
+              <Users className="w-4 h-4 md:w-5 md:h-5 text-purple-400" />
+              <h2 className="text-base md:text-xl font-bold">热门人格类型</h2>
             </div>
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               {popularTypesInfo.map((typeInfo) => (
                 <div
                   key={typeInfo.type}
-                  className="p-4 bg-secondary/50 rounded-xl border border-border"
+                  className="p-3 md:p-4 bg-secondary/50 rounded-xl border border-border"
                 >
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-2xl font-bold gradient-text">{typeInfo.type}</span>
-                    <span className="text-sm text-muted-foreground">{typeInfo.name}</span>
+                  <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                    <span className="text-xl md:text-2xl font-bold gradient-text">{typeInfo.type}</span>
+                    <span className="text-xs md:text-sm text-muted-foreground">{typeInfo.name}</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">{typeInfo.role}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">{typeInfo.role}</p>
                 </div>
               ))}
             </div>
           </Card>
 
           {/* Locked Features */}
-          <Card className="p-8 bg-gradient-to-br from-purple-900/30 to-cyan-900/30 border-purple-500/30">
+          <Card className="p-4 md:p-8 bg-gradient-to-br from-purple-900/30 to-cyan-900/30 border-purple-500/30">
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-                <Lock className="w-8 h-8 text-white" />
+              <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+                <Lock className="w-6 h-6 md:w-8 md:h-8 text-white" />
               </div>
-              <h2 className="text-xl font-bold mb-2">解锁专属分析</h2>
-              <p className="text-muted-foreground mb-6">
+              <h2 className="text-base md:text-xl font-bold mb-1.5 md:mb-2">解锁专属分析</h2>
+              <p className="text-xs md:text-sm text-muted-foreground mb-4 md:mb-6">
                 登录后获取你的专属MBTI人格在{industry.name}行业的深度分析
               </p>
-              <div className="space-y-3">
+              <div className="space-y-2 md:space-y-3">
                 <Link href="/auth" className="block">
                   <Button className="w-full bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90">
                     登录 / 注册
                   </Button>
                 </Link>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-[10px] md:text-sm text-muted-foreground">
                   注册即送100积分，可用于解锁多项专属功能
                 </p>
               </div>
@@ -292,23 +294,25 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
   // 已登录但未测试
   if (!isLoading && user && !profile?.mbtiType) {
     return (
-      <div className="min-h-screen py-24 px-6">
+      <div className="min-h-screen px-4 md:px-6 pt-4 md:pt-24">
         <div className="max-w-4xl mx-auto">
-          <Link href="/industry">
-            <Button variant="ghost" className="mb-8 -ml-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              返回行业专区
-            </Button>
-          </Link>
+          <div className="hidden md:block">
+            <Link href="/industry">
+              <Button variant="ghost" className="mb-8 -ml-4">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                返回行业专区
+              </Button>
+            </Link>
+          </div>
 
-          <Card className="p-8 text-center">
-            <div className="text-6xl mb-4">{industry.icon}</div>
-            <h1 className="text-2xl font-bold mb-4">{industry.name}</h1>
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-              <MessageSquare className="w-8 h-8 text-white" />
+          <Card className="p-4 md:p-8 text-center">
+            <div className="text-4xl md:text-6xl mb-3 md:mb-4">{industry.icon}</div>
+            <h1 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">{industry.name}</h1>
+            <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+              <MessageSquare className="w-6 h-6 md:w-8 md:h-8 text-white" />
             </div>
-            <h2 className="text-xl font-bold mb-2">先完成MBTI测试</h2>
-            <p className="text-muted-foreground mb-6">
+            <h2 className="text-base md:text-xl font-bold mb-1.5 md:mb-2">先完成MBTI测试</h2>
+            <p className="text-xs md:text-sm text-muted-foreground mb-4 md:mb-6">
               获取你的专属人格类型，开启{industry.name}专属分析
             </p>
             <Link href="/test">
@@ -323,79 +327,81 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
   }
 
   return (
-    <div className="min-h-screen py-24 px-6">
+    <div className="min-h-screen px-4 md:px-6 pt-4 md:pt-24">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <Link href="/industry">
-          <Button variant="ghost" className="mb-8 -ml-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            返回行业专区
-          </Button>
-        </Link>
+        {/* Header - hidden on mobile */}
+        <div className="hidden md:block">
+          <Link href="/industry">
+            <Button variant="ghost" className="mb-8 -ml-4">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              返回行业专区
+            </Button>
+          </Link>
+        </div>
 
         {/* Industry Hero */}
-        <div className="text-center mb-8">
-          <div className="text-6xl mb-4">{industry.icon}</div>
-          <h1 className="text-4xl font-bold mb-2">{industry.name}</h1>
-          <p className="text-muted-foreground">{industry.nameEn}</p>
+        <div className="text-center mb-4 md:mb-8">
+          <div className="text-4xl md:text-6xl mb-3 md:mb-4">{industry.icon}</div>
+          <h1 className="text-2xl md:text-4xl font-bold mb-1 md:mb-2">{industry.name}</h1>
+          <p className="text-xs md:text-sm text-muted-foreground">{industry.nameEn}</p>
           {industry.hotRank && industry.hotRank <= 10 && (
-            <Badge className="mt-4 bg-gradient-to-r from-amber-500 to-orange-500">
+            <Badge className="mt-2 md:mt-4 bg-gradient-to-r from-amber-500 to-orange-500">
               热门行业 TOP {industry.hotRank}
             </Badge>
           )}
         </div>
 
         {/* User MBTI Badge */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-4 md:mb-8">
           <Link href={`/test/result?type=${profile?.mbtiType}`}>
-            <Badge className="px-4 py-2 bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 text-lg cursor-pointer">
+            <Badge className="px-3 py-1.5 md:px-4 md:py-2 bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 text-sm md:text-lg cursor-pointer">
               你的MBTI：{profile?.mbtiType}
             </Badge>
           </Link>
         </div>
 
         {/* Description */}
-        <Card className="p-8 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-6">
-          <h2 className="text-xl font-bold mb-4">行业概述</h2>
-          <p className="text-muted-foreground leading-relaxed">{industry.description}</p>
+        <Card className="p-4 md:p-8 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-3 md:mb-6">
+          <h2 className="text-base md:text-xl font-bold mb-2 md:mb-4">行业概述</h2>
+          <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{industry.description}</p>
         </Card>
 
         {/* Features */}
-        <Card className="p-8 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-6">
-          <h2 className="text-xl font-bold mb-6">行业特点</h2>
-          <div className="grid md:grid-cols-2 gap-4">
+        <Card className="p-4 md:p-8 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-3 md:mb-6">
+          <h2 className="text-base md:text-xl font-bold mb-3 md:mb-6">行业特点</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
             {industry.features.map((feature, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-purple-400 text-sm">{i + 1}</span>
+              <div key={i} className="flex items-start gap-2 md:gap-3">
+                <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-purple-400 text-[10px] md:text-sm">{i + 1}</span>
                 </div>
-                <span className="text-sm">{feature}</span>
+                <span className="text-xs md:text-sm">{feature}</span>
               </div>
             ))}
           </div>
         </Card>
 
         {/* Popular Types */}
-        <Card className="p-8 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-6">
-          <div className="flex items-center gap-2 mb-6">
-            <Users className="w-5 h-5 text-purple-400" />
-            <h2 className="text-xl font-bold">热门人格类型</h2>
+        <Card className="p-4 md:p-8 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-3 md:mb-6">
+          <div className="flex items-center gap-2 mb-3 md:mb-6">
+            <Users className="w-4 h-4 md:w-5 md:h-5 text-purple-400" />
+            <h2 className="text-base md:text-xl font-bold">热门人格类型</h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             {popularTypesInfo.map((typeInfo) => (
               <div
                 key={typeInfo.type}
-                className={`p-4 rounded-xl border ${
+                className={`p-3 md:p-4 rounded-xl border ${
                   typeInfo.type === profile?.mbtiType
                     ? 'bg-purple-500/20 border-purple-500/50'
                     : 'bg-secondary/50 border-border'
                 }`}
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-2xl font-bold gradient-text">{typeInfo.type}</span>
-                  <span className="text-sm text-muted-foreground">{typeInfo.name}</span>
+                <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                  <span className="text-xl md:text-2xl font-bold gradient-text">{typeInfo.type}</span>
+                  <span className="text-xs md:text-sm text-muted-foreground">{typeInfo.name}</span>
                   {typeInfo.type === profile?.mbtiType && (
-                    <Badge className="ml-auto bg-green-500/20 text-green-400">你</Badge>
+                    <Badge className="ml-auto bg-green-500/20 text-green-400 text-[10px] md:text-xs">你</Badge>
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground">{typeInfo.role}</p>

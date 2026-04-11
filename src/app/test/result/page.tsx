@@ -182,24 +182,26 @@ function ResultContent() {
   ];
 
   return (
-    <div className="min-h-screen py-24 px-6">
+    <div className="min-h-screen px-4 md:px-6 pt-4 md:pt-24">
       <div className="max-w-4xl mx-auto">
-        {/* Back Link */}
-        <Link href="/test">
-          <Button variant="ghost" className="mb-8 -ml-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            返回测试
-          </Button>
-        </Link>
+        {/* Back Link - hidden on mobile (bottom tab provides nav) */}
+        <div className="hidden md:block">
+          <Link href="/test">
+            <Button variant="ghost" className="mb-8 -ml-4">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              返回测试
+            </Button>
+          </Link>
+        </div>
 
         {/* Result Header */}
-        <div className="text-center mb-12">
-          <p className="text-sm text-muted-foreground mb-4">你的MBTI人格类型是</p>
-          <div className="flex justify-center gap-1 mb-4">
+        <div className="text-center mb-6 md:mb-12">
+          <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-4">你的MBTI人格类型是</p>
+          <div className="flex justify-center gap-1 mb-2 md:mb-4">
             {type.split('').map((letter, i) => (
               <span
                 key={i}
-                className={`text-6xl md:text-7xl font-bold animate-bounce-in ${
+                className={`text-4xl md:text-6xl lg:text-7xl font-bold animate-bounce-in ${
                   i === 0 ? 'type-E' :
                   i === 1 ? 'type-I' :
                   i === 2 ? 'type-T' : 'type-P'
@@ -210,44 +212,44 @@ function ResultContent() {
               </span>
             ))}
           </div>
-          <h1 className="text-3xl font-bold mb-2">{typeInfo.name}</h1>
-          <p className="text-muted-foreground max-w-md mx-auto">
+          <h1 className="text-xl md:text-3xl font-bold mb-1 md:mb-2">{typeInfo.name}</h1>
+          <p className="text-xs md:text-sm text-muted-foreground max-w-md mx-auto">
             {typeInfo.role}
           </p>
-          <p className="text-lg mt-4 max-w-2xl mx-auto">
+          <p className="text-sm md:text-base mt-2 md:mt-4 max-w-2xl mx-auto leading-relaxed">
             {typeInfo.description}
           </p>
 
           {/* Source indicator */}
           {hasRealTest ? (
-            <div className="inline-flex items-center gap-1.5 mt-4 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-xs text-green-400">
+            <div className="inline-flex items-center gap-1.5 mt-3 md:mt-4 px-2.5 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-[10px] md:text-xs text-green-400">
               <span className="w-1.5 h-1.5 bg-green-400 rounded-full" />
               基于你的28道测试题目结果
             </div>
           ) : (
-            <div className="inline-flex items-center gap-1.5 mt-4 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs text-amber-400">
+            <div className="inline-flex items-center gap-1.5 mt-3 md:mt-4 px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-[10px] md:text-xs text-amber-400">
               <BookOpen className="w-3 h-3" />
               类型概览（未完成测试）
             </div>
           )}
 
           {/* Actions */}
-          <div className="flex gap-4 justify-center mt-8">
+          <div className="flex flex-col sm:flex-row gap-2 md:gap-4 justify-center mt-4 md:mt-8 px-2">
             {!hasRealTest && (
-              <Link href="/test">
-                <Button className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90">
+              <Link href="/test" className="block">
+                <Button className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   完成测试获取专属解读
                 </Button>
               </Link>
             )}
-            <Button variant="outline" onClick={handleShare}>
+            <Button variant="outline" onClick={handleShare} className="w-full sm:w-auto">
               <Share2 className="w-4 h-4 mr-2" />
               分享结果
             </Button>
             {hasRealTest && (
-              <Link href="/test">
-                <Button variant="outline">
+              <Link href="/test" className="block">
+                <Button variant="outline" className="w-full sm:w-auto">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   重新测试
                 </Button>
@@ -257,24 +259,24 @@ function ResultContent() {
         </div>
 
         {/* Dimension Bars */}
-        <Card className="p-6 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-8">
-          <h3 className="font-bold mb-6">维度分析</h3>
-          <div className="space-y-5">
+        <Card className="p-4 md:p-6 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-4 md:mb-8">
+          <h3 className="font-bold mb-3 md:mb-6 text-sm md:text-base">维度分析</h3>
+          <div className="space-y-3 md:space-y-5">
             {dimensionLabels.map((dim) => {
               const percentage = Math.abs(dim.value);
               const isLeft = dim.value > 0;
               return (
                 <div key={dim.key}>
-                  <div className="flex justify-between text-sm mb-2">
+                  <div className="flex justify-between text-xs md:text-sm mb-1.5 md:mb-2">
                     <span className={isLeft ? 'text-foreground font-medium' : 'text-muted-foreground'}>
                       {dim.left}
                     </span>
-                    <span className="text-xs text-muted-foreground">{percentage}%</span>
+                    <span className="text-[10px] md:text-xs text-muted-foreground">{percentage}%</span>
                     <span className={!isLeft ? 'text-foreground font-medium' : 'text-muted-foreground'}>
                       {dim.right}
                     </span>
                   </div>
-                  <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                  <div className="h-1.5 md:h-2 bg-secondary rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-1000 ${
                         isLeft
@@ -291,23 +293,23 @@ function ResultContent() {
         </Card>
 
         {/* Traits */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <Card className="p-6 bg-green-500/5 border-green-500/20">
-            <h3 className="font-bold text-green-400 mb-4">性格优势</h3>
-            <ul className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 mb-4 md:mb-8">
+          <Card className="p-4 md:p-6 bg-green-500/5 border-green-500/20">
+            <h3 className="font-bold text-green-400 mb-3 md:mb-4 text-sm md:text-base">性格优势</h3>
+            <ul className="space-y-1.5 md:space-y-2">
               {typeInfo.strengths.map((strength, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm">
+                <li key={i} className="flex items-center gap-2 text-xs md:text-sm">
                   <span className="text-green-500">&#10003;</span>
                   {strength}
                 </li>
               ))}
             </ul>
           </Card>
-          <Card className="p-6 bg-amber-500/5 border-amber-500/20">
-            <h3 className="font-bold text-amber-400 mb-4">潜在盲点</h3>
-            <ul className="space-y-2">
+          <Card className="p-4 md:p-6 bg-amber-500/5 border-amber-500/20">
+            <h3 className="font-bold text-amber-400 mb-3 md:mb-4 text-sm md:text-base">潜在盲点</h3>
+            <ul className="space-y-1.5 md:space-y-2">
               {typeInfo.weaknesses.map((weakness, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm">
+                <li key={i} className="flex items-center gap-2 text-xs md:text-sm">
                   <span className="text-amber-500">!</span>
                   {weakness}
                 </li>
@@ -317,13 +319,13 @@ function ResultContent() {
         </div>
 
         {/* Career Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-6">适合的职业方向</h2>
-          <div className="flex flex-wrap gap-3">
+        <div className="mb-4 md:mb-8">
+          <h2 className="text-lg md:text-2xl font-bold mb-3 md:mb-6">适合的职业方向</h2>
+          <div className="flex flex-wrap gap-2 md:gap-3">
             {typeInfo.careers.map((career, i) => (
               <span
                 key={i}
-                className="px-4 py-2 bg-secondary/80 rounded-full text-sm font-medium"
+                className="px-3 py-1.5 md:px-4 md:py-2 bg-secondary/80 rounded-full text-xs md:text-sm font-medium"
               >
                 {career}
               </span>
@@ -332,18 +334,18 @@ function ResultContent() {
         </div>
 
         {/* Relationship */}
-        <Card className="p-6 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-8">
-          <h3 className="font-bold mb-4">人际关系模式</h3>
-          <p className="text-muted-foreground leading-relaxed">
+        <Card className="p-4 md:p-6 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-4 md:mb-8">
+          <h3 className="font-bold mb-2 md:mb-4 text-sm md:text-base">人际关系模式</h3>
+          <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
             {typeInfo.relationships}
           </p>
         </Card>
 
         {/* AI Deep Interpretation Section */}
-        <div className="mt-12 border-t border-border pt-12">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold mb-3">AI 深度解读</h2>
-            <p className="text-muted-foreground">
+        <div className="mt-6 md:mt-12 border-t border-border pt-6 md:pt-12">
+          <div className="text-center mb-4 md:mb-8">
+            <h2 className="text-lg md:text-2xl font-bold mb-2 md:mb-3">AI 深度解读</h2>
+            <p className="text-xs md:text-sm text-muted-foreground">
               {hasRealTest
                 ? '基于你28道题目的具体选择，AI为你生成专属性格分析'
                 : '完成MBTI测试后，AI将根据你的具体选择生成深度解读'}
@@ -356,17 +358,17 @@ function ResultContent() {
                 size="lg"
                 onClick={fetchInterpretation}
                 disabled={!hasRealTest}
-                className={`px-8 py-6 text-lg ${
+                className={`px-6 md:px-8 py-4 md:py-6 text-sm md:text-lg w-full sm:w-auto ${
                   hasRealTest
                     ? 'bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90'
                     : ''
                 }`}
               >
-                <Sparkles className="w-5 h-5 mr-2" />
+                <Sparkles className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                 {hasRealTest ? '获取AI深度解读' : '请先完成测试'}
               </Button>
               {hasRealTest && (
-                <p className="text-xs text-muted-foreground mt-3">
+                <p className="text-[10px] md:text-xs text-muted-foreground mt-2 md:mt-3">
                   解读将基于你每道题的具体选择生成，约需10-20秒
                 </p>
               )}
@@ -374,14 +376,14 @@ function ResultContent() {
           ) : (
             <>
               {/* Tabs for interpretation and chat */}
-              <div className="flex gap-2 mb-6 border-b border-border">
+              <div className="flex gap-2 mb-4 md:mb-6 border-b border-border">
                 <button
                   onClick={() => setActiveTab('interpretation')}
-                  className={`px-4 py-2 text-sm font-medium transition-colors relative ${
+                  className={`px-3 md:px-4 py-2 text-xs md:text-sm font-medium transition-colors relative ${
                     activeTab === 'interpretation' ? 'text-purple-400' : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  <Sparkles className="w-4 h-4 inline mr-1" />
+                  <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4 inline mr-1" />
                   AI 解读
                   {activeTab === 'interpretation' && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-500" />
@@ -389,11 +391,11 @@ function ResultContent() {
                 </button>
                 <button
                   onClick={() => setActiveTab('chat')}
-                  className={`px-4 py-2 text-sm font-medium transition-colors relative ${
+                  className={`px-3 md:px-4 py-2 text-xs md:text-sm font-medium transition-colors relative ${
                     activeTab === 'chat' ? 'text-purple-400' : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  <MessageCircle className="w-4 h-4 inline mr-1" />
+                  <MessageCircle className="w-3.5 h-3.5 md:w-4 md:h-4 inline mr-1" />
                   AI 对话
                   {activeTab === 'chat' && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-500" />

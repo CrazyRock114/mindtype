@@ -29,7 +29,7 @@ export default function RootLayout({
         <AuthProvider>
           <StarBackground />
           <NavBar />
-          <main className="relative z-10">
+          <main className="relative z-10 pb-tab-bar md:pb-0 pt-0 md:pt-0">
             {children}
           </main>
           <Toaster position="top-center" />

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { QuestionCard } from '@/components/QuestionCard';
@@ -19,7 +18,6 @@ function TestContent() {
   }, []);
 
   const handleSubmit = useCallback(() => {
-    // Fill unanswered with neutral (3)
     const filledAnswers = state.answers.map(a => a ?? 3);
     const result = calculateMBTI(filledAnswers);
     setResult({
@@ -30,7 +28,6 @@ function TestContent() {
     });
   }, [state.answers, setResult]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' || e.key === '5') {
@@ -52,10 +49,8 @@ function TestContent() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [state.currentQuestion, state.answers, nextQuestion, prevQuestion, selectAnswer, handleSubmit]);
 
-  // Redirect to result when complete
   useEffect(() => {
     if (state.isComplete && state.result) {
-      // Save test result to localStorage for result page to read
       localStorage.setItem('mbti_test_result', JSON.stringify(state.result));
       router.push(`/test/result?type=${state.result.type}`);
     }
@@ -76,30 +71,30 @@ function TestContent() {
   const answeredCount = state.answers.filter(a => a !== null).length;
 
   return (
-    <div className="min-h-screen py-24 px-6">
-      {/* Header */}
-      <div className="max-w-2xl mx-auto mb-12">
-        <Link href="/">
-          <Button variant="ghost" className="mb-8 -ml-4">
+    <div className="min-h-screen px-4 md:px-6 pt-4 md:pt-24">
+      {/* Header - compact on mobile, hidden back button since bottom tab provides navigation */}
+      <div className="max-w-2xl mx-auto mb-4 md:mb-12">
+        <div className="hidden md:block">
+          <Button variant="ghost" className="mb-8 -ml-4" onClick={() => router.push('/')}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             返回首页
           </Button>
-        </Link>
+        </div>
 
-        <h1 className="text-3xl md:text-4xl font-bold mb-4">
+        <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-4">
           <span className="gradient-text">MBTI 性格测试</span>
         </h1>
-        <p className="text-muted-foreground">
-          共 {mbtiQuestions.length} 道题目，预计用时 5-10 分钟
+        <p className="text-xs md:text-sm text-muted-foreground">
+          共 {mbtiQuestions.length} 题，预计 5-10 分钟
         </p>
 
         {/* Stats */}
-        <div className="flex gap-6 mt-6 text-sm">
-          <div className="flex items-center gap-2">
+        <div className="flex gap-4 md:gap-6 mt-3 md:mt-6 text-xs md:text-sm">
+          <div className="flex items-center gap-1.5 md:gap-2">
             <span className="text-purple-400 font-semibold">{answeredCount}</span>
             <span className="text-muted-foreground">已作答</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 md:gap-2">
             <span className="text-cyan-400 font-semibold">{mbtiQuestions.length - answeredCount}</span>
             <span className="text-muted-foreground">未作答</span>
           </div>
@@ -127,19 +122,18 @@ function TestContent() {
 
       {/* Unanswered Questions Quick Jump */}
       {state.answers.some(a => a === null) && (
-        <div className="max-w-2xl mx-auto mt-12">
-          <p className="text-sm text-muted-foreground mb-3">快速跳转到未作答题目：</p>
-          <div className="flex flex-wrap gap-2">
+        <div className="max-w-2xl mx-auto mt-6 md:mt-12">
+          <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-3">快速跳转未作答：</p>
+          <div className="flex flex-wrap gap-1.5 md:gap-2">
             {state.answers.map((answer, index) => (
               answer === null && (
                 <button
                   key={index}
                   onClick={() => {
-                    // Navigate to this question by updating state
                     const event = new CustomEvent('jumpToQuestion', { detail: index });
                     window.dispatchEvent(event);
                   }}
-                  className="w-8 h-8 rounded-lg bg-secondary/50 hover:bg-secondary flex items-center justify-center text-sm transition-colors"
+                  className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-secondary/50 hover:bg-secondary flex items-center justify-center text-xs transition-colors"
                 >
                   {index + 1}
                 </button>

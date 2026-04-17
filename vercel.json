@@ -1,0 +1,17 @@
+{
+  "buildCommand": "bash ./scripts/build.sh",
+  "outputDirectory": ".next",
+  "installCommand": "pnpm install --prefer-frozen-lockfile",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key"
+  },
+  "build": {
+    "env": {
+      "COZE_SUPABASE_URL": "@supabase_url",
+      "COZE_SUPABASE_ANON_KEY": "@supabase_anon_key"
+    }
+  }
+}

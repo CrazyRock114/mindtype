@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { toPng } from 'html-to-image';
 import {
   ArrowLeft,
   Share2,
@@ -14,9 +15,13 @@ import {
   Quote,
   Tag,
   Star,
+  Download,
+  ImageIcon,
+  X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { FunTestShareCard } from '@/components/FunTestShareCard';
 import { getFunTest, saveTestRecord, rarityColors } from '@/lib/fun-tests';
 import type { CalculationResult } from '@/lib/fun-tests';
 
@@ -29,6 +34,10 @@ export default function FunTestResultPage() {
   const [calcResult, setCalcResult] = useState<CalculationResult | null>(null);
   const [mounted, setMounted] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [shareImage, setShareImage] = useState<string | null>(null);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const shareCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -46,7 +55,6 @@ export default function FunTestResultPage() {
         setCalcResult(result);
         saveTestRecord(testId, result.primary);
       } else {
-        // No answers found - redirect to test
         router.push(`/fun-test/${testId}`);
       }
     } catch {
@@ -64,42 +72,74 @@ export default function FunTestResultPage() {
     return test.results[calcResult.secondary];
   }, [test, calcResult]);
 
-  const handleShare = async () => {
+  // Generate share image
+  const handleGenerateImage = useCallback(async () => {
+    if (!shareCardRef.current || generating) return;
+    setGenerating(true);
+    try {
+      const dataUrl = await toPng(shareCardRef.current, {
+        quality: 0.95,
+        pixelRatio: 2,
+        cacheBust: true,
+      });
+      setShareImage(dataUrl);
+      setShowShareModal(true);
+    } catch (err) {
+      console.error('Failed to generate image:', err);
+    } finally {
+      setGenerating(false);
+    }
+  }, [generating]);
+
+  // Download image
+  const handleDownload = useCallback(() => {
+    if (!shareImage || !primaryResult) return;
+    const link = document.createElement('a');
+    link.download = `MindType-${test?.title}-${primaryResult.title}.png`;
+    link.href = shareImage;
+    link.click();
+  }, [shareImage, primaryResult, test]);
+
+  // Native share with image
+  const handleShareImage = useCallback(async () => {
+    if (!shareImage || !test || !primaryResult) return;
+    try {
+      const response = await fetch(shareImage);
+      const blob = await response.blob();
+      const file = new File([blob], `mindtype-${testId}.png`, { type: 'image/png' });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: `${test.title} - ${primaryResult.title}`,
+          text: `我的${test.title}结果是：${primaryResult.title}\n${primaryResult.memeQuote}`,
+          files: [file],
+        });
+      } else {
+        // Fallback: copy image to clipboard
+        await navigator.clipboard.write([
+          new ClipboardItem({ 'image/png': blob }),
+        ]);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch {
+      // User cancelled or not supported
+    }
+  }, [shareImage, test, primaryResult, testId]);
+
+  // Copy text share
+  const handleCopyText = useCallback(async () => {
     if (!test || !primaryResult) return;
     const url = `${window.location.origin}/fun-test/${testId}`;
     const text = `我的${test.title}结果是：${primaryResult.title}\n${primaryResult.memeQuote}\n\n快来测测你的！`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `${test.title} - ${primaryResult.title}`,
-          text,
-          url,
-        });
-      } catch {
-        // User cancelled
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(`${text}\n${url}`);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      } catch {
-        // ignore
-      }
-    }
-  };
-
-  const handleCopyLink = async () => {
-    const url = `${window.location.origin}/fun-test/${testId}`;
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(`${text}\n${url}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // ignore
     }
-  };
+  }, [test, primaryResult, testId]);
 
   const handleRetake = () => {
     localStorage.removeItem(`fun_test_${testId}_answers`);
@@ -268,33 +308,66 @@ export default function FunTestResultPage() {
           </Card>
         )}
 
-        {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center mb-6 md:mb-8">
-          <Button
-            onClick={handleShare}
-            variant="outline"
-            className="w-full sm:w-auto gap-2"
-          >
-            {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
-            {copied ? '已复制' : '分享结果'}
-          </Button>
-          <Button
-            onClick={handleCopyLink}
-            variant="outline"
-            className="w-full sm:w-auto gap-2"
-          >
-            <Copy className="w-4 h-4" />
-            复制链接
-          </Button>
-          <Button
-            onClick={handleRetake}
-            variant="outline"
-            className="w-full sm:w-auto gap-2"
-          >
-            <RefreshCw className="w-4 h-4" />
-            再测一次
-          </Button>
-        </div>
+        {/* ===== SHARE CARD PREVIEW ===== */}
+        <Card className="p-4 md:p-6 bg-card/60 backdrop-blur-sm border-purple-500/20 mb-4 md:mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <ImageIcon className="w-4 h-4 text-purple-400" />
+            <h3 className="font-bold text-sm md:text-base">分享卡片</h3>
+          </div>
+          <p className="text-xs md:text-sm text-muted-foreground mb-4">
+            生成精美分享图，发朋友圈/小红书/微博
+          </p>
+
+          {/* Preview - scaled down */}
+          <div className="flex justify-center mb-4 overflow-hidden rounded-xl bg-black/20">
+            <div className="scale-[0.55] origin-top">
+              <FunTestShareCard
+                ref={shareCardRef}
+                test={test}
+                result={primaryResult}
+                calcResult={calcResult}
+                secondaryResult={secondaryResult}
+              />
+            </div>
+          </div>
+
+          {/* Share Actions */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              onClick={handleGenerateImage}
+              disabled={generating}
+              className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90 gap-2"
+            >
+              {generating ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  生成中...
+                </>
+              ) : (
+                <>
+                  <ImageIcon className="w-4 h-4" />
+                  生成分享图
+                </>
+              )}
+            </Button>
+            <Button
+              onClick={handleCopyText}
+              variant="outline"
+              className="w-full sm:w-auto gap-2"
+            >
+              {copied && !shareImage ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied && !shareImage ? '已复制' : '复制文案'}
+            </Button>
+            <Button
+              onClick={handleRetake}
+              variant="outline"
+              className="w-full sm:w-auto gap-2"
+            >
+              <RefreshCw className="w-4 h-4" />
+              再测一次
+            </Button>
+          </div>
+        </Card>
 
         {/* CTA: Try正经MBTI */}
         <div className="text-center p-5 md:p-8 rounded-2xl bg-gradient-to-br from-purple-900/30 to-cyan-900/30 border border-purple-500/20">
@@ -318,6 +391,76 @@ export default function FunTestResultPage() {
           </div>
         </div>
       </div>
+
+      {/* ===== SHARE MODAL ===== */}
+      {showShareModal && shareImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          onClick={() => setShowShareModal(false)}
+        >
+          <div
+            className="relative max-w-sm w-full bg-card rounded-2xl overflow-hidden border border-border shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setShowShareModal(false)}
+              className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/40 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Image */}
+            <div className="bg-black/20">
+              <img
+                src={shareImage}
+                alt={`${primaryResult.title} 分享图`}
+                className="w-full h-auto"
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="p-4 flex flex-col gap-2">
+              <Button
+                onClick={handleDownload}
+                className="w-full bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90 gap-2"
+              >
+                <Download className="w-4 h-4" />
+                保存到相册
+              </Button>
+              <Button
+                onClick={handleShareImage}
+                variant="outline"
+                className="w-full gap-2"
+              >
+                <Share2 className="w-4 h-4" />
+                分享给好友
+              </Button>
+              <Button
+                onClick={handleCopyText}
+                variant="ghost"
+                className="w-full gap-2 text-muted-foreground"
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? '已复制文案' : '复制分享文案'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden share card for image generation (off-screen but rendered) */}
+      {mounted && calcResult && primaryResult && (
+        <div className="fixed -left-[9999px] top-0">
+          <FunTestShareCard
+            ref={shareCardRef}
+            test={test}
+            result={primaryResult}
+            calcResult={calcResult}
+            secondaryResult={secondaryResult}
+          />
+        </div>
+      )}
     </div>
   );
 }

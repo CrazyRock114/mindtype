@@ -126,6 +126,7 @@ export const animalTest: FunTest = {
       traits: ['情绪稳定', '佛系', '和谁都能处', '活着就好'],
       memeQuote: '情绪稳定，世界和平。', mbtiHint: 'INFP / ISFP / ISTP',
       color: 'text-amber-600', bgGradient: 'from-amber-700 to-yellow-800', emoji: '🦫', rarity: 'SSR',
+      personaScene: { main: '🦫', companions: ['🍊', '😌', '🐦'], layout: 'stack' },
     },
     gou: {
       id: 'gou', title: '金毛犬', subtitle: 'GOLDEN-DOG',
@@ -133,6 +134,7 @@ export const animalTest: FunTest = {
       traits: ['热情忠诚', '社交达人', '人见人爱', '小太阳'],
       memeQuote: '你好！我叫金毛！你叫什么！', mbtiHint: 'ENFP / ESFP / ENFJ',
       color: 'text-yellow-400', bgGradient: 'from-yellow-600 to-amber-700', emoji: '🐕', rarity: 'SR',
+      personaScene: { main: '🐕', companions: ['🎾', '❤️', '👅'], layout: 'orbit' },
     },
     mao: {
       id: 'mao', title: '猫', subtitle: 'CAT',
@@ -140,6 +142,7 @@ export const animalTest: FunTest = {
       traits: ['独立高冷', '来去自如', '不取悦任何人', 'I人终极形态'],
       memeQuote: '朕的事，不用你管。', mbtiHint: 'INTJ / INTP / ISTJ',
       color: 'text-purple-400', bgGradient: 'from-purple-700 to-indigo-900', emoji: '🐱', rarity: 'SR',
+      personaScene: { main: '🐱', companions: ['🧶', '🐟', '👑'], layout: 'stack' },
     },
     mi: {
       id: 'mi', title: '蜜蜂', subtitle: 'BEE',
@@ -147,6 +150,7 @@ export const animalTest: FunTest = {
       traits: ['勤劳高效', '目标明确', '有计划', '停不下来'],
       memeQuote: '忙完这阵就可以忙下一阵了。', mbtiHint: 'ENTJ / ESTJ / ISTJ',
       color: 'text-yellow-300', bgGradient: 'from-yellow-500 to-amber-600', emoji: '🐝', rarity: 'SR',
+      personaScene: { main: '🐝', companions: ['🍯', '🌸', '⚡'], layout: 'orbit' },
     },
     shu: {
       id: 'shu', title: '仓鼠', subtitle: 'HAMSTER',
@@ -154,6 +158,7 @@ export const animalTest: FunTest = {
       traits: ['囤积癖', '谨慎小心', '舒适圈居民', '害怕改变'],
       memeQuote: '囤得再多，也不够用。', mbtiHint: 'ISFJ / ISTJ / INFP',
       color: 'text-orange-300', bgGradient: 'from-orange-500 to-amber-600', emoji: '🐹', rarity: 'R',
+      personaScene: { main: '🐹', companions: ['🥜', '🏠', '📦'], layout: 'stack' },
     },
     hu: {
       id: 'hu', title: '老虎', subtitle: 'TIGER',
@@ -161,6 +166,7 @@ export const animalTest: FunTest = {
       traits: ['霸气独立', '领地意识', '有野心', '王者气场'],
       memeQuote: '我的地盘我做主。', mbtiHint: 'ENTJ / ESTP / INTJ',
       color: 'text-orange-500', bgGradient: 'from-orange-700 to-red-800', emoji: '🐯', rarity: 'SSR',
+      personaScene: { main: '🐯', companions: ['👑', '🔥', '🌲'], layout: 'orbit' },
     },
     hou: {
       id: 'hou', title: '猴子', subtitle: 'MONKEY',
@@ -168,6 +174,7 @@ export const animalTest: FunTest = {
       traits: ['活泼调皮', '好奇心强', '开心果', '停不下来'],
       memeQuote: '人生就是一场猴戏。', mbtiHint: 'ENTP / ESTP / ENFP',
       color: 'text-amber-500', bgGradient: 'from-amber-600 to-yellow-700', emoji: '🐒', rarity: 'R',
+      personaScene: { main: '🐒', companions: ['🍌', '🌴', '🎭'], layout: 'scatter' },
     },
     maomi: {
       id: 'maomi', title: '树懒', subtitle: 'SLOTH',
@@ -175,6 +182,7 @@ export const animalTest: FunTest = {
       traits: ['慢节奏', '懒但可爱', '不焦虑', '慢慢来'],
       memeQuote: '急什么，反正也赶不上。', mbtiHint: 'INFP / ISFP / INTP',
       color: 'text-green-400', bgGradient: 'from-green-700 to-emerald-800', emoji: '🦥', rarity: 'R',
+      personaScene: { main: '🦥', companions: ['🌿', '😴', '🐢'], layout: 'stack' },
     },
     ha: {
       id: 'ha', title: '哈士奇', subtitle: 'HUSKY',
@@ -182,6 +190,7 @@ export const animalTest: FunTest = {
       traits: ['快乐源泉', '行为不可预测', '永不emo', '混乱中自有秩序'],
       memeQuote: '我虽然二，但我快乐啊！', mbtiHint: 'ENFP / ESFP / ENTP',
       color: 'text-blue-300', bgGradient: 'from-blue-600 to-slate-800', emoji: '🐺', rarity: 'SR',
+      personaScene: { main: '🐺', companions: ['❄️', '🏠', '😵'], layout: 'scatter' },
     },
     niu: {
       id: 'niu', title: '牛', subtitle: 'OX',
@@ -189,6 +198,7 @@ export const animalTest: FunTest = {
       traits: ['踏实勤劳', '默默付出', '可靠', '不抱怨'],
       memeQuote: '耕耘不问收获，但收获总会来。', mbtiHint: 'ISFJ / ISTJ / ESFJ',
       color: 'text-amber-700', bgGradient: 'from-amber-800 to-yellow-900', emoji: '🐂', rarity: 'R',
+      personaScene: { main: '🐂', companions: ['🌾', '☀️', '💪'], layout: 'row' },
     },
     tu: {
       id: 'tu', title: '兔子', subtitle: 'RABBIT',
@@ -196,6 +206,7 @@ export const animalTest: FunTest = {
       traits: ['敏感温柔', '需要安全感', '容易受惊', '全心全意'],
       memeQuote: '我胆子小，但我的爱很大。', mbtiHint: 'INFJ / ISFJ / INFP',
       color: 'text-pink-300', bgGradient: 'from-pink-400 to-rose-500', emoji: '🐰', rarity: 'R',
+      personaScene: { main: '🐰', companions: ['🥕', '🌸', '💕'], layout: 'stack' },
     },
   },
   calculate: (answers) => calculateResult(animalTest, answers),

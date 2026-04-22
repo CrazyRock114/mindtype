@@ -47,6 +47,12 @@ export interface FunResult {
   bgGradient: string;        // tailwind gradient for share card
   emoji: string;
   rarity?: string;           // 稀有度标签，如 "SSR" "N"
+  // 视觉形象：结果对应的有趣画面（emoji组合）
+  personaScene?: {
+    main: string;            // 主形象emoji
+    companions: string[];    //  companion emojis，围绕主形象
+    layout: 'orbit' | 'stack' | 'scatter' | 'row'; // 布局方式
+  };
 }
 
 export interface CalculationResult {

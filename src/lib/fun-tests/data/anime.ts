@@ -126,6 +126,7 @@ export const animeTest: FunTest = {
       traits: ['浓度爆表', 'B站6级', '追番1000+', '漫展全勤'],
       memeQuote: '我不是宅，我只是生活在另一个世界。', mbtiHint: 'INTP / INFP / ISTP',
       color: 'text-purple-400', bgGradient: 'from-purple-700 to-fuchsia-900', emoji: '⛩️', rarity: 'SSR',
+      personaScene: { main: '⛩️', companions: ['📺', '🎮', '🍜'], layout: 'orbit' },
     },
     zaisheng: {
       id: 'zaisheng', title: '资深二刺螈', subtitle: 'SENIOR-OTAKU',
@@ -133,6 +134,7 @@ export const animeTest: FunTest = {
       traits: ['追番买谷', '逛展磕CP', '二三次元平衡', '浓度适中'],
       memeQuote: '二次元是我的精神家园，三次元是我的生存基地。', mbtiHint: 'ENFP / INFP / ISFP',
       color: 'text-pink-400', bgGradient: 'from-pink-600 to-rose-700', emoji: '🎀', rarity: 'SR',
+      personaScene: { main: '🎀', companions: ['📱', '🛍️', '🎌'], layout: 'stack' },
     },
     putong: {
       id: 'putong', title: '普通观众', subtitle: 'VIEWER',
@@ -140,6 +142,7 @@ export const animeTest: FunTest = {
       traits: ['偶尔看番', '知道经典', '不沉迷', '观光客'],
       memeQuote: '好看就看，不好看就换。', mbtiHint: 'ISFJ / ESFJ / ISTJ',
       color: 'text-blue-400', bgGradient: 'from-blue-600 to-indigo-700', emoji: '👀', rarity: 'N',
+      personaScene: { main: '👀', companions: ['📺', '🍿', '🤷'], layout: 'stack' },
     },
     xianchong: {
       id: 'xianchong', title: '现充', subtitle: 'NORMIE',
@@ -147,6 +150,7 @@ export const animeTest: FunTest = {
       traits: ['阳光运动', '社交达人', '二次元绝缘', '现充本充'],
       memeQuote: '动漫？那不是小孩子看的吗？', mbtiHint: 'ESFP / ESTP / ENFJ',
       color: 'text-yellow-400', bgGradient: 'from-yellow-600 to-amber-700', emoji: '☀️', rarity: 'SR',
+      personaScene: { main: '☀️', companions: ['🏃', '🎉', '👫'], layout: 'orbit' },
     },
   },
   calculate: (answers) => calculateResult(animeTest, answers),

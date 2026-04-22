@@ -126,6 +126,7 @@ export const overseaTest: FunTest = {
       traits: ['融入local', '户外运动', '健康生活', '中英夹杂'],
       memeQuote: 'Let\'s grab a coffee and go hiking!', mbtiHint: 'ESFP / ENFP / ESTP',
       color: 'text-pink-400', bgGradient: 'from-pink-600 to-rose-700', emoji: '🧘', rarity: 'SSR',
+      personaScene: { main: '🧘', companions: ['☕', '🏔️', '🥗'], layout: 'orbit' },
     },
     chushen: {
       id: 'chushen', title: '留子厨神', subtitle: 'CHU-SHEN',
@@ -133,6 +134,7 @@ export const overseaTest: FunTest = {
       traits: ['厨艺飞涨', '乡愁治愈', '厨房王者', '室友之神'],
       memeQuote: '出了国，人人都是新东方毕业生。', mbtiHint: 'ISFJ / ESFJ / ISTJ',
       color: 'text-orange-400', bgGradient: 'from-orange-600 to-red-700', emoji: '👨‍🍳', rarity: 'SR',
+      personaScene: { main: '👨‍🍳', companions: ['🍲', '🥢', '🔥'], layout: 'scatter' },
     },
     social: {
       id: 'social', title: 'Social King/Queen', subtitle: 'SOCIAL-KING',
@@ -140,6 +142,7 @@ export const overseaTest: FunTest = {
       traits: ['交际花', '跨国友谊', '周末满档', '社牛天赋'],
       memeQuote: '全世界都是我朋友。', mbtiHint: 'ENFP / ESFP / ENFJ',
       color: 'text-purple-400', bgGradient: 'from-purple-600 to-violet-700', emoji: '👑', rarity: 'SSR',
+      personaScene: { main: '👑', companions: ['🥂', '🌍', '💃'], layout: 'orbit' },
     },
     anying: {
       id: 'anying', title: '阴暗爬行留子', subtitle: 'AN-YING',
@@ -147,6 +150,7 @@ export const overseaTest: FunTest = {
       traits: ['抑郁边缘', '想家', '孤独', '深夜emo'],
       memeQuote: '想死，但觉得该死的另有其人。', mbtiHint: 'INFP / INFJ / ISFP',
       color: 'text-slate-400', bgGradient: 'from-slate-700 to-gray-900', emoji: '🕷️', rarity: 'SR',
+      personaScene: { main: '🕷️', companions: ['🌑', '📱', '😢'], layout: 'stack' },
     },
     shenghuo: {
       id: 'shenghuo', title: '生存主义留子', subtitle: 'SHENG-CUN',
@@ -154,6 +158,7 @@ export const overseaTest: FunTest = {
       traits: ['务实派', '精打细算', '目标明确', '生存专家'],
       memeQuote: '活着，拿到文凭，回去。', mbtiHint: 'ISTJ / ESTJ / INTJ',
       color: 'text-green-400', bgGradient: 'from-green-600 to-emerald-700', emoji: '🎒', rarity: 'R',
+      personaScene: { main: '🎒', companions: ['📝', '💰', '📅'], layout: 'stack' },
     },
     pugong: {
       id: 'pugong', title: '普通留子', subtitle: 'PU-TONG',
@@ -161,6 +166,7 @@ export const overseaTest: FunTest = {
       traits: ['普普通通', '努力适应', '慢慢成长', '大多数'],
       memeQuote: '我就是个普通留子，活着就不错了。', mbtiHint: 'ISFJ / ISTJ / ESFJ',
       color: 'text-blue-400', bgGradient: 'from-blue-600 to-indigo-700', emoji: '📖', rarity: 'N',
+      personaScene: { main: '📖', companions: ['☕', '🏠', '🤷'], layout: 'stack' },
     },
   },
   calculate: (answers) => calculateResult(overseaTest, answers),

@@ -106,6 +106,7 @@ export const socialTest: FunTest = {
       traits: ['自来熟', '社牛天花板', '无边界', '全场焦点'],
       memeQuote: '没有我暖不了的场。', mbtiHint: 'ENFP / ESFP / ENTP',
       color: 'text-red-400', bgGradient: 'from-red-600 to-orange-700', emoji: '💣', rarity: 'SSR',
+      personaScene: { main: '💣', companions: ['🔥', '🎉', '📢'], layout: 'scatter' },
     },
     yinxing: {
       id: 'yinxing', title: '隐形人', subtitle: 'YIN-XING',
@@ -113,6 +114,7 @@ export const socialTest: FunTest = {
       traits: ['社交隐身', '独处成瘾', '被动社交', '低电量'],
       memeQuote: '别看我，我不在。', mbtiHint: 'INTJ / INTP / ISTP',
       color: 'text-slate-400', bgGradient: 'from-slate-700 to-gray-900', emoji: '👻', rarity: 'SR',
+      personaScene: { main: '👻', companions: ['🌫️', '🚶', '📱'], layout: 'stack' },
     },
     daren: {
       id: 'daren', title: '社交达人', subtitle: 'DA-REN',
@@ -120,6 +122,7 @@ export const socialTest: FunTest = {
       traits: ['人脉王', '察言观色', '八面玲珑', '社交艺术家'],
       memeQuote: '朋友多了路好走。', mbtiHint: 'ENFJ / ESFJ / ESTP',
       color: 'text-amber-400', bgGradient: 'from-amber-600 to-yellow-700', emoji: '🌟', rarity: 'SR',
+      personaScene: { main: '🌟', companions: ['✨', '🤝', '👥'], layout: 'orbit' },
     },
     guancha: {
       id: 'guancha', title: '观察者', subtitle: 'GUAN-CHA',
@@ -127,6 +130,7 @@ export const socialTest: FunTest = {
       traits: ['旁观者', '信息收集', '不发朋友圈', '暗中观察'],
       memeQuote: '我不说话，但我什么都看到了。', mbtiHint: 'INTJ / INFJ / ISTJ',
       color: 'text-blue-400', bgGradient: 'from-blue-700 to-indigo-900', emoji: '👁️', rarity: 'R',
+      personaScene: { main: '👁️', companions: ['🔍', '📸', '🤫'], layout: 'stack' },
     },
     pugong: {
       id: 'pugong', title: '普通社恐', subtitle: 'PU-GONG',
@@ -134,6 +138,7 @@ export const socialTest: FunTest = {
       traits: ['可社可恐', '需要心理建设', '偶尔主动', '社交薛定谔'],
       memeQuote: '我可以社交，但我不想。', mbtiHint: 'ISFJ / ISTJ / INFP',
       color: 'text-green-400', bgGradient: 'from-green-600 to-emerald-700', emoji: '😐', rarity: 'N',
+      personaScene: { main: '😐', companions: ['😰', '🤷', '💨'], layout: 'stack' },
     },
     kaiwang: {
       id: 'kaiwang', title: '社交海王', subtitle: 'KAI-WANG',
@@ -141,6 +146,7 @@ export const socialTest: FunTest = {
       traits: ['社交自由', '来者不拒', '去者不追', '能量可控'],
       memeQuote: '社交是我生活中的调味品，不是主食。', mbtiHint: 'ENTP / ESTP / ENFP',
       color: 'text-purple-400', bgGradient: 'from-purple-600 to-violet-700', emoji: '🌊', rarity: 'SR',
+      personaScene: { main: '🌊', companions: ['🐟', '🐠', '🐡'], layout: 'row' },
     },
   },
   calculate: (answers) => calculateResult(socialTest, answers),

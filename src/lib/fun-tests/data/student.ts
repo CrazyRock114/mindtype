@@ -126,6 +126,7 @@ export const studentTest: FunTest = {
       traits: ['GPA天花板', '奖学金收割机', '井井有条', '压力源'],
       memeQuote: '不是我在卷，是你们在躺。', mbtiHint: 'INTJ / ENTJ / ISTJ',
       color: 'text-yellow-400', bgGradient: 'from-yellow-600 to-amber-700', emoji: '👑', rarity: 'UR',
+      personaScene: { main: '👑', companions: ['📚', '💯', '✨'], layout: 'orbit' },
     },
     ddl: {
       id: 'ddl', title: 'DDL战士', subtitle: 'DDL-FIGHTER',
@@ -133,6 +134,7 @@ export const studentTest: FunTest = {
       traits: ['截止前爆发', '肾上腺素驱动', '效率奇高', '灵感依赖'],
       memeQuote: 'Deadline是第一生产力。', mbtiHint: 'ENTP / ENFP / ESTP',
       color: 'text-red-400', bgGradient: 'from-red-600 to-orange-700', emoji: '🔥', rarity: 'SR',
+      personaScene: { main: '🔥', companions: ['⏰', '💻', '📉'], layout: 'scatter' },
     },
     hunzi: {
       id: 'hunzi', title: '学术混子', subtitle: 'HUN-ZI',
@@ -140,6 +142,7 @@ export const studentTest: FunTest = {
       traits: ['摸鱼达人', '及格万岁', '生存智慧', '运气不错'],
       memeQuote: '混也是一种本事。', mbtiHint: 'INTP / ISTP / ENTP',
       color: 'text-green-400', bgGradient: 'from-green-600 to-emerald-700', emoji: '🐟', rarity: 'SR',
+      personaScene: { main: '🐟', companions: ['📝', '🎮', '😴'], layout: 'stack' },
     },
     bai: {
       id: 'bai', title: '彻底摆烂人', subtitle: 'BAI-LAN',
@@ -147,6 +150,7 @@ export const studentTest: FunTest = {
       traits: ['彻底摆烂', '不在乎', '爱咋咋地', '潜在天才'],
       memeQuote: '爱咋咋地，活着就行。', mbtiHint: 'INFP / ISFP / ISTP',
       color: 'text-slate-400', bgGradient: 'from-slate-600 to-gray-700', emoji: '🛌', rarity: 'SSR',
+      personaScene: { main: '🛌', companions: ['💤', '📱', '🍔'], layout: 'stack' },
     },
     shen: {
       id: 'shen', title: '神仙队友', subtitle: 'SHEN-XIAN',
@@ -154,6 +158,7 @@ export const studentTest: FunTest = {
       traits: ['靠谱', '默默付出', '不抢功', '让人安心'],
       memeQuote: '我不出声，但我完成了。', mbtiHint: 'ISFJ / ISTJ / ESFJ',
       color: 'text-blue-400', bgGradient: 'from-blue-600 to-indigo-700', emoji: '👼', rarity: 'R',
+      personaScene: { main: '👼', companions: ['🤝', '📋', '✅'], layout: 'orbit' },
     },
     pugong: {
       id: 'pugong', title: '普通学生', subtitle: 'PU-TONG',
@@ -161,6 +166,7 @@ export const studentTest: FunTest = {
       traits: ['普普通通', '偶尔努力', '按时交作业', '大多数'],
       memeQuote: '我就是个普通学生，活着就不错了。', mbtiHint: 'ISFJ / ISTJ / ESTJ',
       color: 'text-cyan-400', bgGradient: 'from-cyan-600 to-teal-700', emoji: '👤', rarity: 'N',
+      personaScene: { main: '👤', companions: ['📖', '☕', '😐'], layout: 'stack' },
     },
   },
   calculate: (answers) => calculateResult(studentTest, answers),

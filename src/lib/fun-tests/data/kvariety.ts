@@ -126,6 +126,7 @@ export const kvarietyTest: FunTest = {
       traits: ['控场大师', '照顾所有人', '化解尴尬', '团队粘合剂'],
       memeQuote: '没关系，有我在。', mbtiHint: 'ENFJ / ESFJ / ENTJ',
       color: 'text-amber-400', bgGradient: 'from-amber-700 to-yellow-800', emoji: '🎤', rarity: 'SSR',
+      personaScene: { main: '🎤', companions: ['✨', '🎬', '👏'], layout: 'orbit' },
     },
     gao: {
       id: 'gao', title: '综艺之神', subtitle: 'VARIETY-GOD',
@@ -133,6 +134,7 @@ export const kvarietyTest: FunTest = {
       traits: ['天然笑点', '倒霉蛋', '吃货', '夸张反应'],
       memeQuote: '我也不知道为什么，但就是很好笑。', mbtiHint: 'ENFP / ESFP / ENTP',
       color: 'text-green-400', bgGradient: 'from-green-700 to-emerald-800', emoji: '😂', rarity: 'SSR',
+      personaScene: { main: '😂', companions: ['🎭', '🍔', '💥'], layout: 'scatter' },
     },
     jingji: {
       id: 'jingji', title: '胜负师', subtitle: 'WINNER',
@@ -140,6 +142,7 @@ export const kvarietyTest: FunTest = {
       traits: ['只想赢', '不择手段', '燃点担当', '争议焦点'],
       memeQuote: '给我赢！不择手段地赢！', mbtiHint: 'ENTJ / ESTJ / INTJ',
       color: 'text-red-400', bgGradient: 'from-red-700 to-orange-800', emoji: '🔥', rarity: 'SR',
+      personaScene: { main: '🔥', companions: ['🏆', '💪', '⚡'], layout: 'orbit' },
     },
     tian: {
       id: 'tian', title: '天选之子', subtitle: 'CHOSEN-ONE',
@@ -147,6 +150,7 @@ export const kvarietyTest: FunTest = {
       traits: ['镜头磁铁', '治愈笑容', '不做也有效果', '天选之人'],
       memeQuote: '我也不知道为什么镜头总对着我。', mbtiHint: 'ISFJ / ESFJ / INFJ',
       color: 'text-pink-400', bgGradient: 'from-pink-600 to-rose-700', emoji: '✨', rarity: 'UR',
+      personaScene: { main: '✨', companions: ['🌟', '😇', '📸'], layout: 'orbit' },
     },
     pugong: {
       id: 'pugong', title: '综艺背景板', subtitle: 'BACKGROUND',
@@ -154,6 +158,7 @@ export const kvarietyTest: FunTest = {
       traits: ['不抢镜', '默默存在', '被剪辑对象', '节目拼图'],
       memeQuote: '虽然镜头少，但我也是一员。', mbtiHint: 'ISFJ / ISTJ / INFP',
       color: 'text-slate-400', bgGradient: 'from-slate-600 to-gray-800', emoji: '🧍', rarity: 'N',
+      personaScene: { main: '🧍', companions: ['🌫️', '🪴', '🫥'], layout: 'stack' },
     },
   },
   calculate: (answers) => calculateResult(kvarietyTest, answers),

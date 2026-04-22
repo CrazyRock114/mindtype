@@ -126,6 +126,7 @@ export const workTest: FunTest = {
       traits: ['996达人', '永远在学习', '焦虑源泉', '自律狂魔'],
       memeQuote: '不卷不是中国人。', mbtiHint: 'INTJ / ENTJ / ESTJ',
       color: 'text-red-400', bgGradient: 'from-red-600 to-orange-700', emoji: '🔥', rarity: 'SR',
+      personaScene: { main: '🔥', companions: ['💻', '⏰', '💀'], layout: 'orbit' },
     },
     mouyu: {
       id: 'mouyu', title: '摸鱼大师', subtitle: 'MO-YU',
@@ -133,6 +134,7 @@ export const workTest: FunTest = {
       traits: ['多线程操作', '眼神管理', '摸鱼姿势多样', '演技派'],
       memeQuote: '表面上在工作，实际上在摸鱼。', mbtiHint: 'INTP / ISTP / INFP',
       color: 'text-teal-400', bgGradient: 'from-teal-600 to-cyan-700', emoji: '🐟', rarity: 'SR',
+      personaScene: { main: '🐟', companions: ['💻', '😴', '🎮'], layout: 'scatter' },
     },
     laoshi: {
       id: 'laoshi', title: '老实人', subtitle: 'LAO-SHI',
@@ -140,6 +142,7 @@ export const workTest: FunTest = {
       traits: ['按时完成', '不惹事', '默默付出', '存在感低'],
       memeQuote: '我不求升职，只求别裁员。', mbtiHint: 'ISFJ / ISTJ / ESFJ',
       color: 'text-blue-400', bgGradient: 'from-blue-600 to-indigo-700', emoji: '🐢', rarity: 'R',
+      personaScene: { main: '🐢', companions: ['📋', '☕'], layout: 'stack' },
     },
     tangping: {
       id: 'tangping', title: '躺平居士', subtitle: 'TANG-PING',
@@ -147,6 +150,7 @@ export const workTest: FunTest = {
       traits: ['极简生活', '低欲望', '心态平和', '拒绝焦虑'],
       memeQuote: '躺平是对抗内卷的最佳姿势。', mbtiHint: 'INFP / ISFP / ISTP',
       color: 'text-green-400', bgGradient: 'from-green-600 to-emerald-700', emoji: '🛌', rarity: 'SR',
+      personaScene: { main: '🛌', companions: ['😴', '💤', '📱'], layout: 'stack' },
     },
     juelan: {
       id: 'juelan', title: '摆烂艺术家', subtitle: 'JUE-LAN',
@@ -154,6 +158,7 @@ export const workTest: FunTest = {
       traits: ['战略性放弃', '拖延症晚期', '逃避大师', '佛系'],
       memeQuote: '开摆！', mbtiHint: 'INTP / INFP / ISTP',
       color: 'text-purple-400', bgGradient: 'from-purple-600 to-violet-700', emoji: '🎨', rarity: 'SR',
+      personaScene: { main: '🎨', companions: ['🗑️', '😌'], layout: 'scatter' },
     },
     mianju: {
       id: 'mianju', title: '职场面具人', subtitle: 'MIAN-JU',
@@ -161,6 +166,7 @@ export const workTest: FunTest = {
       traits: ['千面人格', '演技派', '左右逢源', '内心空虚'],
       memeQuote: '上班就是演戏，演技决定工资。', mbtiHint: 'INFJ / ENFJ / ESFP',
       color: 'text-amber-400', bgGradient: 'from-amber-600 to-yellow-700', emoji: '🎭', rarity: 'SSR',
+      personaScene: { main: '🎭', companions: ['👔', '😏', '🤡'], layout: 'orbit' },
     },
     fankang: {
       id: 'fankang', title: '反卷斗士', subtitle: 'FAN-KANG',
@@ -168,6 +174,7 @@ export const workTest: FunTest = {
       traits: ['敢说不', '维权意识', '整顿职场', '嘴替'],
       memeQuote: '这班不上也罢！', mbtiHint: 'ENTP / ESTP / ENFP',
       color: 'text-orange-400', bgGradient: 'from-orange-600 to-red-700', emoji: '✊', rarity: 'SSR',
+      personaScene: { main: '✊', companions: ['🖕', '📢', '💥'], layout: 'scatter' },
     },
     zhiqing: {
       id: 'zhiqing', title: '职场清醒者', subtitle: 'ZHI-QING',
@@ -175,6 +182,7 @@ export const workTest: FunTest = {
       traits: ['看透一切', '理性冷静', '不抱幻想', '观察者'],
       memeQuote: '打工而已，别太上头。', mbtiHint: 'INTJ / INTP / ISTJ',
       color: 'text-cyan-400', bgGradient: 'from-cyan-600 to-blue-700', emoji: '🧊', rarity: 'SR',
+      personaScene: { main: '🧊', companions: ['☕', '👁️'], layout: 'stack' },
     },
     pua: {
       id: 'pua', title: 'PUA受害者', subtitle: 'PUA-VIC',
@@ -182,6 +190,7 @@ export const workTest: FunTest = {
       traits: ['背锅侠', '老好人', '加班狂', '自我怀疑'],
       memeQuote: '领导说我很重要，但从不给我加薪。', mbtiHint: 'ISFJ / INFJ / INFP',
       color: 'text-rose-400', bgGradient: 'from-rose-600 to-pink-700', emoji: '😢', rarity: 'R',
+      personaScene: { main: '😢', companions: ['🍳', '📉'], layout: 'stack' },
     },
     baoer: {
       id: 'baoer', title: '职场二哈', subtitle: 'BAO-ER',
@@ -189,6 +198,7 @@ export const workTest: FunTest = {
       traits: ['口无遮拦', '开心果', '定时炸弹', '真性情'],
       memeQuote: '我就是管不住我这张嘴！', mbtiHint: 'ENTP / ESTP / ENFP',
       color: 'text-yellow-400', bgGradient: 'from-yellow-600 to-amber-700', emoji: '🐕', rarity: 'SR',
+      personaScene: { main: '🐕', companions: ['💥', '🗣️'], layout: 'orbit' },
     },
     baipiao: {
       id: 'baipiao', title: '白嫖怪', subtitle: 'BAI-PIAO',
@@ -196,6 +206,7 @@ export const workTest: FunTest = {
       traits: ['薅羊毛', '福利雷达', '精明算计', '乐在其中'],
       memeQuote: '公司的羊毛不薅白不薅。', mbtiHint: 'ESTP / ISTP / ENTP',
       color: 'text-lime-400', bgGradient: 'from-lime-600 to-green-700', emoji: '🦙', rarity: 'R',
+      personaScene: { main: '🦙', companions: ['☕', '🍪', '💰'], layout: 'row' },
     },
     putong: {
       id: 'putong', title: '普通打工人', subtitle: 'PU-TONG',
@@ -203,6 +214,7 @@ export const workTest: FunTest = {
       traits: ['普通人', '随波逐流', '偶尔挣扎', '大多数'],
       memeQuote: '我就是个普通人，活着就不错了。', mbtiHint: 'ISTJ / ISFJ / ESTJ',
       color: 'text-slate-400', bgGradient: 'from-slate-600 to-gray-700', emoji: '👤', rarity: 'N',
+      personaScene: { main: '👤', companions: ['☕', '📎'], layout: 'stack' },
     },
   },
   calculate: (answers) => calculateResult(workTest, answers),

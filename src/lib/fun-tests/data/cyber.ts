@@ -126,6 +126,7 @@ export const cyberTest: FunTest = {
       traits: ['多马甲', '密码偏执', '暗网用户', 'AI信徒'],
       memeQuote: '人类太脆弱了，我选择上传意识。', mbtiHint: 'INTP / INTP / INTJ',
       color: 'text-purple-400', bgGradient: 'from-purple-700 to-indigo-900', emoji: '👾', rarity: 'SSR',
+      personaScene: { main: '👾', companions: ['💻', '🤖', '🔮'], layout: 'orbit' },
     },
     wangluo: {
       id: 'wangluo', title: '数字原住民', subtitle: 'DIGITAL-NATIVE',
@@ -133,6 +134,7 @@ export const cyberTest: FunTest = {
       traits: ['屏幕依赖', '算法喂养', '云端记忆', '现实可替代'],
       memeQuote: '没有网络的一天？那不叫一天。', mbtiHint: 'ENTP / ENFP / ESTP',
       color: 'text-cyan-400', bgGradient: 'from-cyan-700 to-blue-900', emoji: '🌐', rarity: 'SR',
+      personaScene: { main: '🌐', companions: ['📱', '👤', '☁️'], layout: 'orbit' },
     },
     xianshi: {
       id: 'xianshi', title: '现实主义者', subtitle: 'REALIST',
@@ -140,6 +142,7 @@ export const cyberTest: FunTest = {
       traits: ['面对面优先', '纸质书爱好者', '科技不绑架', '清醒独立'],
       memeQuote: '放下手机，看看真实的世界。', mbtiHint: 'ISTJ / ISFJ / ESTJ',
       color: 'text-green-400', bgGradient: 'from-green-700 to-emerald-900', emoji: '🌳', rarity: 'SR',
+      personaScene: { main: '🌳', companions: ['📚', '🚶', '☀️'], layout: 'stack' },
     },
     shenghuo: {
       id: 'shenghuo', title: '数字游民', subtitle: 'NOMAD',
@@ -147,6 +150,7 @@ export const cyberTest: FunTest = {
       traits: ['自由切换', '效率优先', '游牧生活', '平衡大师'],
       memeQuote: '有Wi-Fi的地方，就是我的办公室。', mbtiHint: 'ENTJ / ENTP / ESTP',
       color: 'text-blue-400', bgGradient: 'from-blue-700 to-cyan-900', emoji: '🧑‍💻', rarity: 'R',
+      personaScene: { main: '🧑‍💻', companions: ['☕', '🏖️', '💼'], layout: 'scatter' },
     },
     putong: {
       id: 'putong', title: '普通网民', subtitle: 'NETIZEN',
@@ -154,6 +158,7 @@ export const cyberTest: FunTest = {
       traits: ['普普通通', '享受便利', '珍惜现实', '大多数'],
       memeQuote: '我就是个普通网民，活着就不错了。', mbtiHint: 'ISFJ / ESFJ / ISTJ',
       color: 'text-slate-400', bgGradient: 'from-slate-600 to-gray-800', emoji: '👤', rarity: 'N',
+      personaScene: { main: '👤', companions: ['📱', '🏠', '☕'], layout: 'stack' },
     },
   },
   calculate: (answers) => calculateResult(cyberTest, answers),

@@ -126,6 +126,7 @@ export const loveTest: FunTest = {
       traits: ['为爱痴狂', '情绪被对象操控', '失去自我', '恋爱即生活'],
       memeQuote: '没有TA的世界是灰色的。', mbtiHint: 'INFP / ENFP / ISFJ',
       color: 'text-pink-400', bgGradient: 'from-pink-600 to-rose-700', emoji: '🧠', rarity: 'SSR',
+      personaScene: { main: '🧠', companions: ['💖', '🩸', '💘'], layout: 'orbit' },
     },
     qingxing: {
       id: 'qingxing', title: '清醒脑', subtitle: 'QING-XING',
@@ -133,6 +134,7 @@ export const loveTest: FunTest = {
       traits: ['理性分析', '独立人格', '情绪稳定', '冷静克制'],
       memeQuote: '恋爱可以，恋爱脑不行。', mbtiHint: 'INTJ / ENTJ / ISTJ',
       color: 'text-blue-400', bgGradient: 'from-blue-600 to-cyan-700', emoji: '🧊', rarity: 'SR',
+      personaScene: { main: '🧊', companions: ['❄️', '🧠', '💎'], layout: 'stack' },
     },
     jiujing: {
       id: 'jiujing', title: '酒肉情侣', subtitle: 'JIU-JING',
@@ -140,6 +142,7 @@ export const loveTest: FunTest = {
       traits: ['及时行乐', '不谈未来', '享乐主义', '关系模糊'],
       memeQuote: '今朝有酒今朝醉，明天的事明天说。', mbtiHint: 'ESTP / ESFP / ENTP',
       color: 'text-amber-400', bgGradient: 'from-amber-600 to-yellow-700', emoji: '🍻', rarity: 'SR',
+      personaScene: { main: '🍻', companions: ['🍷', '🥩', '🌙'], layout: 'scatter' },
     },
     haizhu: {
       id: 'haizhu', title: '海王/海后', subtitle: 'HAI-WANG',
@@ -147,6 +150,7 @@ export const loveTest: FunTest = {
       traits: ['鱼塘管理', '拒绝绑定', '享受暧昧', '情感自由'],
       memeQuote: '我养鱼，但我每条鱼都知道我在养鱼。', mbtiHint: 'ENTP / ESTP / ENFP',
       color: 'text-purple-400', bgGradient: 'from-purple-600 to-violet-700', emoji: '🧜', rarity: 'SSR',
+      personaScene: { main: '🧜', companions: ['🐟', '🐠', '🌊'], layout: 'orbit' },
     },
     tian: {
       id: 'tian', title: '纯爱战神', subtitle: 'CHUN-AI',
@@ -154,6 +158,7 @@ export const loveTest: FunTest = {
       traits: ['为爱牺牲', '不计回报', '纯粹专一', '容易受伤'],
       memeQuote: '真爱就是：我愿意为你，付出一切。', mbtiHint: 'INFJ / INFP / ISFJ',
       color: 'text-red-400', bgGradient: 'from-red-600 to-pink-700', emoji: '⚔️', rarity: 'UR',
+      personaScene: { main: '⚔️', companions: ['💖', '🛡️', '✨'], layout: 'orbit' },
     },
     jiaolv: {
       id: 'jiaolv', title: '恋爱焦虑者', subtitle: 'JIAO-LV',
@@ -161,6 +166,7 @@ export const loveTest: FunTest = {
       traits: ['患得患失', '消息焦虑', '控制欲', '安全感缺失'],
       memeQuote: 'TA已读不回的3小时，我已经写好遗书了。', mbtiHint: 'ISFJ / INFJ / ENFJ',
       color: 'text-orange-400', bgGradient: 'from-orange-600 to-red-700', emoji: '😰', rarity: 'R',
+      personaScene: { main: '😰', companions: ['📱', '⏰', '💔'], layout: 'scatter' },
     },
     zhiqing: {
       id: 'zhiqing', title: '清醒恋爱者', subtitle: 'ZHI-QING',
@@ -168,6 +174,7 @@ export const loveTest: FunTest = {
       traits: ['理性投资', '有进有退', '成熟稳重', '清醒经营'],
       memeQuote: '我爱TA，但更爱我自己。', mbtiHint: 'INTJ / ENTJ / ISTP',
       color: 'text-cyan-400', bgGradient: 'from-cyan-600 to-teal-700', emoji: '💎', rarity: 'SR',
+      personaScene: { main: '💎', companions: ['🧠', '❤️', '⚖️'], layout: 'stack' },
     },
     tangping: {
       id: 'tangping', title: '恋爱躺平人', subtitle: 'LIAN-TANG',
@@ -175,6 +182,7 @@ export const loveTest: FunTest = {
       traits: ['佛系恋爱', '不主动', '不负责', '顺其自然'],
       memeQuote: '爱情？有就有，没有就算了。', mbtiHint: 'INTP / INFP / ISTP',
       color: 'text-green-400', bgGradient: 'from-green-600 to-emerald-700', emoji: '🛌', rarity: 'R',
+      personaScene: { main: '🛌', companions: ['💤', '📱', '🌸'], layout: 'stack' },
     },
     fankang: {
       id: 'fankang', title: '反PUA斗士', subtitle: 'FAN-PUA',
@@ -182,6 +190,7 @@ export const loveTest: FunTest = {
       traits: ['反套路', '防骗雷达', '独立自强', '不吃饼'],
       memeQuote: '想PUA我？先去练练段位。', mbtiHint: 'ENTJ / ESTJ / ENTP',
       color: 'text-red-400', bgGradient: 'from-red-600 to-orange-700', emoji: '🛡️', rarity: 'SR',
+      personaScene: { main: '🛡️', companions: ['⚔️', '🚫', '💪'], layout: 'orbit' },
     },
     juanwang: {
       id: 'juanwang', title: '事业爱情双卷王', subtitle: 'SHUANG-JUAN',
@@ -189,6 +198,7 @@ export const loveTest: FunTest = {
       traits: ['恋爱项目管理', '仪式感MAX', '卷王本王', '细节控'],
       memeQuote: '谈恋爱也要KPI，不然怎么进步？', mbtiHint: 'ENTJ / ESTJ / ISTJ',
       color: 'text-yellow-400', bgGradient: 'from-yellow-600 to-amber-700', emoji: '📊', rarity: 'SSR',
+      personaScene: { main: '📊', companions: ['📈', '💼', '⏰'], layout: 'scatter' },
     },
   },
   calculate: (answers) => calculateResult(loveTest, answers),

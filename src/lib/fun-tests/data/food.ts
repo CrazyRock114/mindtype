@@ -126,6 +126,7 @@ export const foodTest: FunTest = {
       traits: ['热闹滚烫', '包容万物', '有脾气但温暖', '社交中心'],
       memeQuote: '没有什么是一顿火锅解决不了的。', mbtiHint: 'ENFP / ESFP / ENFJ',
       color: 'text-red-400', bgGradient: 'from-red-600 to-orange-700', emoji: '🍲', rarity: 'SR',
+      personaScene: { main: '🍲', companions: ['🌶️', '🔥', '🥢'], layout: 'orbit' },
     },
     baizhou: {
       id: 'baizhou', title: '白粥', subtitle: 'PORRIDGE',
@@ -133,6 +134,7 @@ export const foodTest: FunTest = {
       traits: ['清淡温和', '养胃治愈', '低调踏实', '不可或缺'],
       memeQuote: '平平淡淡才是真。', mbtiHint: 'ISFJ / ISTJ / INFJ',
       color: 'text-slate-300', bgGradient: 'from-slate-500 to-gray-700', emoji: '🥣', rarity: 'R',
+      personaScene: { main: '🥣', companions: ['🥢', '🌾', '☁️'], layout: 'stack' },
     },
     naicha: {
       id: 'naicha', title: '奶茶', subtitle: 'BOBA-TEA',
@@ -140,6 +142,7 @@ export const foodTest: FunTest = {
       traits: ['甜美治愈', '紧跟潮流', '社交货币', '快乐源泉'],
       memeQuote: '奶茶在手，快乐我有。', mbtiHint: 'ESFP / ENFP / ESFJ',
       color: 'text-pink-400', bgGradient: 'from-pink-500 to-rose-600', emoji: '🧋', rarity: 'SR',
+      personaScene: { main: '🧋', companions: ['🧊', '🍬', '✨'], layout: 'orbit' },
     },
     luosifen: {
       id: 'luosifen', title: '螺蛳粉', subtitle: 'LUO-SI',
@@ -147,6 +150,7 @@ export const foodTest: FunTest = {
       traits: ['特立独行', '不在乎眼光', '真爱至上', '两极分化'],
       memeQuote: '爱我你怕了吗？', mbtiHint: 'INTP / ENTP / INFP',
       color: 'text-yellow-600', bgGradient: 'from-yellow-700 to-amber-800', emoji: '🍜', rarity: 'SSR',
+      personaScene: { main: '🍜', companions: ['🌶️', '😷', '✨'], layout: 'scatter' },
     },
     tianpin: {
       id: 'tianpin', title: '甜品', subtitle: 'DESSERT',
@@ -154,6 +158,7 @@ export const foodTest: FunTest = {
       traits: ['精致甜美', '追求品质', '仪式感强', '偶尔暴食'],
       memeQuote: '人生已经够苦了，需要点甜。', mbtiHint: 'ISFP / INFP / ESFP',
       color: 'text-pink-300', bgGradient: 'from-pink-400 to-rose-500', emoji: '🍰', rarity: 'SR',
+      personaScene: { main: '🍰', companions: ['🍓', '🍦', '✨'], layout: 'stack' },
     },
     paomian: {
       id: 'paomian', title: '泡面', subtitle: 'INSTANT',
@@ -161,6 +166,7 @@ export const foodTest: FunTest = {
       traits: ['简单直接', '随遇而安', '方便快捷', '内心丰富'],
       memeQuote: '简单快乐，人生不累。', mbtiHint: 'ISTP / ESTP / ENTP',
       color: 'text-yellow-400', bgGradient: 'from-yellow-500 to-amber-600', emoji: '🍜', rarity: 'N',
+      personaScene: { main: '🍜', companions: ['🥚', '🌶️', '⏰'], layout: 'stack' },
     },
     salad: {
       id: 'salad', title: '沙拉', subtitle: 'SALAD',
@@ -168,6 +174,7 @@ export const foodTest: FunTest = {
       traits: ['健康自律', '有品位', '克制理性', '追求品质'],
       memeQuote: '自律给我自由。', mbtiHint: 'INTJ / ENTJ / ISTJ',
       color: 'text-green-400', bgGradient: 'from-green-600 to-emerald-700', emoji: '🥗', rarity: 'SR',
+      personaScene: { main: '🥗', companions: ['🥑', '🥕', '💪'], layout: 'orbit' },
     },
     malaxiangguo: {
       id: 'malaxiangguo', title: '麻辣香锅', subtitle: 'MALA-XIANG',
@@ -175,6 +182,7 @@ export const foodTest: FunTest = {
       traits: ['重口味', '接地气', '真实直爽', '让人上头'],
       memeQuote: '够辣才够味，够真才够朋友。', mbtiHint: 'ESTP / ESFP / ENTP',
       color: 'text-red-500', bgGradient: 'from-red-700 to-orange-800', emoji: '🌶️', rarity: 'R',
+      personaScene: { main: '🌶️', companions: ['🔥', '🍲', '😋'], layout: 'scatter' },
     },
     mianbao: {
       id: 'mianbao', title: '面包', subtitle: 'BREAD',
@@ -182,6 +190,7 @@ export const foodTest: FunTest = {
       traits: ['百搭可靠', '温暖踏实', '适应力强', '让人安心'],
       memeQuote: '我百搭，但我不是备胎。', mbtiHint: 'ISFJ / ESFJ / ISTJ',
       color: 'text-amber-300', bgGradient: 'from-amber-500 to-yellow-600', emoji: '🍞', rarity: 'N',
+      personaScene: { main: '🍞', companions: ['🧈', '🍯', '☕'], layout: 'stack' },
     },
     doujiang: {
       id: 'doujiang', title: '豆浆油条', subtitle: 'DOU-JIANG',
@@ -189,6 +198,7 @@ export const foodTest: FunTest = {
       traits: ['朴素经典', '有温度', '不追潮流', '让人安心'],
       memeQuote: '平平淡淡，温温暖暖。', mbtiHint: 'ISTJ / ISFJ / ESTJ',
       color: 'text-amber-400', bgGradient: 'from-amber-600 to-yellow-700', emoji: '🥢', rarity: 'N',
+      personaScene: { main: '🥢', companions: ['🥛', '🥖', '☀️'], layout: 'row' },
     },
     hanbao: {
       id: 'hanbao', title: '汉堡', subtitle: 'BURGER',
@@ -196,6 +206,7 @@ export const foodTest: FunTest = {
       traits: ['高效直接', '目标明确', '快节奏', '现代都市'],
       memeQuote: '时间就是金钱，效率就是生命。', mbtiHint: 'ENTJ / ESTJ / INTJ',
       color: 'text-orange-400', bgGradient: 'from-orange-600 to-red-700', emoji: '🍔', rarity: 'R',
+      personaScene: { main: '🍔', companions: ['🍟', '🥤', '⚡'], layout: 'stack' },
     },
   },
   calculate: (answers) => calculateResult(foodTest, answers),

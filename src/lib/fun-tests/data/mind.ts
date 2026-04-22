@@ -164,6 +164,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-gray-700 to-gray-900',
       emoji: '💀',
       rarity: 'R',
+      personaScene: { main: '💀', companions: ['🚶', '🌫️'], layout: 'stack' },
     },
     malo: {
       id: 'malo',
@@ -177,6 +178,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-amber-600 to-orange-700',
       emoji: '🐒',
       rarity: 'SR',
+      personaScene: { main: '🐒', companions: ['🍌', '💼', '🌀'], layout: 'orbit' },
     },
     joke: {
       id: 'joke',
@@ -190,6 +192,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-purple-600 to-indigo-800',
       emoji: '🤡',
       rarity: 'SR',
+      personaScene: { main: '🤡', companions: ['😂', '💔', '🎪'], layout: 'orbit' },
     },
     fake: {
       id: 'fake',
@@ -203,6 +206,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-teal-600 to-cyan-800',
       emoji: '🎭',
       rarity: 'SSR',
+      personaScene: { main: '🎭', companions: ['😇', '😈', '😐'], layout: 'orbit' },
     },
     shit: {
       id: 'shit',
@@ -216,6 +220,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-amber-700 to-yellow-900',
       emoji: '💩',
       rarity: 'R',
+      personaScene: { main: '💩', companions: ['🧹', '💪'], layout: 'stack' },
     },
     solo: {
       id: 'solo',
@@ -229,6 +234,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-blue-700 to-slate-900',
       emoji: '🏰',
       rarity: 'R',
+      personaScene: { main: '🏰', companions: ['🚶', '🌑', '📱'], layout: 'stack' },
     },
     monk: {
       id: 'monk',
@@ -242,6 +248,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-emerald-700 to-teal-900',
       emoji: '🧘',
       rarity: 'SR',
+      personaScene: { main: '🧘', companions: ['☁️', '🍃', '🔔'], layout: 'orbit' },
     },
     imsb: {
       id: 'imsb',
@@ -255,6 +262,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-rose-700 to-pink-900',
       emoji: '⚔️',
       rarity: 'SSR',
+      personaScene: { main: '⚔️', companions: ['😈', '😇', '💔'], layout: 'orbit' },
     },
     imfw: {
       id: 'imfw',
@@ -268,6 +276,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-green-700 to-emerald-900',
       emoji: '🌱',
       rarity: 'UR',
+      personaScene: { main: '🌱', companions: ['🛋️', '😴', '📺'], layout: 'stack' },
     },
     fuck: {
       id: 'fuck',
@@ -281,6 +290,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-red-600 to-orange-700',
       emoji: '🔥',
       rarity: 'SR',
+      personaScene: { main: '🔥', companions: ['🌿', '💢', '🍻'], layout: 'scatter' },
     },
     zzzz: {
       id: 'zzzz',
@@ -294,6 +304,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-indigo-700 to-violet-900',
       emoji: '😴',
       rarity: 'R',
+      personaScene: { main: '😴', companions: ['💤', '🛌', '⏰'], layout: 'stack' },
     },
     drunk: {
       id: 'drunk',
@@ -307,6 +318,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-yellow-600 to-amber-800',
       emoji: '🍺',
       rarity: 'SSR',
+      personaScene: { main: '🍺', companions: ['🍷', '😵', '🌙'], layout: 'scatter' },
     },
     hhhh: {
       id: 'hhhh',
@@ -320,6 +332,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-pink-500 to-rose-600',
       emoji: '😂',
       rarity: 'UR',
+      personaScene: { main: '😂', companions: ['🤣', '✨', '🌈'], layout: 'scatter' },
     },
     poor: {
       id: 'poor',
@@ -333,6 +346,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-cyan-700 to-blue-900',
       emoji: '🔋',
       rarity: 'R',
+      personaScene: { main: '🔋', companions: ['📉', '💀', '⚡'], layout: 'row' },
     },
     atm: {
       id: 'atm',
@@ -346,6 +360,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-green-600 to-emerald-800',
       emoji: '💸',
       rarity: 'SR',
+      personaScene: { main: '💸', companions: ['💰', '🤲', '🛍️'], layout: 'scatter' },
     },
     ojbk: {
       id: 'ojbk',
@@ -359,6 +374,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-slate-600 to-gray-800',
       emoji: '😐',
       rarity: 'SR',
+      personaScene: { main: '😐', companions: ['🤷', '👌', '💨'], layout: 'stack' },
     },
     think: {
       id: 'think',
@@ -372,6 +388,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-violet-700 to-purple-900',
       emoji: '🤔',
       rarity: 'R',
+      personaScene: { main: '🤔', companions: ['💭', '❓', '🧠'], layout: 'orbit' },
     },
     woc: {
       id: 'woc',
@@ -385,6 +402,7 @@ export const mindTest: FunTest = {
       bgGradient: 'from-orange-600 to-red-800',
       emoji: '😮',
       rarity: 'R',
+      personaScene: { main: '😮', companions: ['‼️', '😱', '💥'], layout: 'scatter' },
     },
   },
   calculate: (answers) => calculateResult(mindTest, answers),

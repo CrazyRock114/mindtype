@@ -127,6 +127,7 @@ export const memeTest: FunTest = {
       memeQuote: 'Much wow. Very chill.',
       mbtiHint: 'INFP / ISFP / ISTP',
       color: 'text-yellow-400', bgGradient: 'from-yellow-600 to-amber-700', emoji: '🐕', rarity: 'SSR',
+      personaScene: { main: '🐕', companions: ['🚀', '💰', '🌕'], layout: 'orbit' },
     },
     cat: {
       id: 'cat', title: 'Smug Cat', subtitle: 'SMUG-CAT',
@@ -135,6 +136,7 @@ export const memeTest: FunTest = {
       memeQuote: 'I know everything, but I don\'t care.',
       mbtiHint: 'INTJ / INTP / ISTJ',
       color: 'text-teal-400', bgGradient: 'from-teal-700 to-cyan-800', emoji: '😺', rarity: 'SR',
+      personaScene: { main: '😺', companions: ['😏', '🐱', '✨'], layout: 'stack' },
     },
     yelly: {
       id: 'yelly', title: 'Woman Yelling', subtitle: 'YELLY',
@@ -143,6 +145,7 @@ export const memeTest: FunTest = {
       memeQuote: 'I AM NOT YELLING, THIS IS MY NORMAL VOICE!',
       mbtiHint: 'ESFP / ESTP / ENFP',
       color: 'text-red-400', bgGradient: 'from-red-700 to-orange-800', emoji: '😤', rarity: 'SR',
+      personaScene: { main: '😤', companions: ['📢', '💢', '🙀'], layout: 'scatter' },
     },
     brain: {
       id: 'brain', title: 'Galaxy Brain', subtitle: 'BRAIN',
@@ -151,6 +154,7 @@ export const memeTest: FunTest = {
       memeQuote: 'My brain is expanding, but nothing is happening.',
       mbtiHint: 'INTP / INTJ / INFJ',
       color: 'text-violet-400', bgGradient: 'from-violet-700 to-purple-900', emoji: '🧠', rarity: 'SR',
+      personaScene: { main: '🧠', companions: ['💡', '🌌', '⚡'], layout: 'orbit' },
     },
     stonks: {
       id: 'stonks', title: 'Stonks Man', subtitle: 'STONKS',
@@ -159,6 +163,7 @@ export const memeTest: FunTest = {
       memeQuote: 'It\'s not a loss, it\'s a long-term investment!',
       mbtiHint: 'ENTJ / ESTJ / ENTP',
       color: 'text-green-400', bgGradient: 'from-green-700 to-emerald-800', emoji: '📈', rarity: 'SSR',
+      personaScene: { main: '📈', companions: ['💰', '📊', '🚀'], layout: 'stack' },
     },
     troll: {
       id: 'troll', title: 'Trollface', subtitle: 'TROLL',
@@ -167,6 +172,7 @@ export const memeTest: FunTest = {
       memeQuote: 'I did it for the lulz.',
       mbtiHint: 'ENTP / ESTP / ENFP',
       color: 'text-orange-400', bgGradient: 'from-orange-700 to-red-800', emoji: '😈', rarity: 'SSR',
+      personaScene: { main: '😈', companions: ['🔥', '🎣', '😂'], layout: 'scatter' },
     },
     pugong: {
       id: 'pugong', title: 'NPC', subtitle: 'NPC',
@@ -175,6 +181,7 @@ export const memeTest: FunTest = {
       memeQuote: 'I am just here to scroll.',
       mbtiHint: 'ISFJ / ISTJ / ESFJ',
       color: 'text-slate-400', bgGradient: 'from-slate-600 to-gray-800', emoji: '🤖', rarity: 'N',
+      personaScene: { main: '🤖', companions: ['👤', '📱', '💤'], layout: 'stack' },
     },
   },
   calculate: (answers) => calculateResult(memeTest, answers),

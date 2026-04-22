@@ -19,7 +19,7 @@ const rarityLabels: Record<string, string> = {
 };
 
 /**
- * 375 x 667 px = 9:16 竖版分享卡片
+ * 750 x 1334 px = 9:16 竖版分享卡片（2x 高清）
  * 核心设计：每个结果有一个"视觉形象" —— emoji 组合构成的有趣画面
  */
 export const FunTestShareCard = forwardRef<HTMLDivElement, FunTestShareCardProps>(
@@ -37,39 +37,39 @@ export const FunTestShareCard = forwardRef<HTMLDivElement, FunTestShareCardProps
     const companions = scene?.companions || [];
     const layout = scene?.layout || 'orbit';
 
-    // Companion positions based on layout
+    // Companion positions based on layout (2x scale for 750px card)
     const getCompanionStyle = (index: number, total: number): React.CSSProperties => {
       if (layout === 'stack') {
         return {
           position: 'absolute' as const,
-          bottom: `${-8 - index * 18}px`,
-          right: `${-10 + index * 8}px`,
-          fontSize: `${28 - index * 4}px`,
+          bottom: `${-16 - index * 36}px`,
+          right: `${-20 + index * 16}px`,
+          fontSize: `${56 - index * 8}px`,
           opacity: 0.85 - index * 0.15,
           transform: `rotate(${-10 + index * 8}deg)`,
-          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
           zIndex: 10 - index,
         };
       }
       if (layout === 'row') {
-        const spacing = 50;
+        const spacing = 100;
         const startX = -((total - 1) * spacing) / 2;
         return {
           position: 'absolute' as const,
-          bottom: '-28px',
+          bottom: '-56px',
           left: '50%',
-          marginLeft: `${startX + index * spacing - 16}px`,
-          fontSize: '28px',
-          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+          marginLeft: `${startX + index * spacing - 32}px`,
+          fontSize: '56px',
+          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
           zIndex: 10,
         };
       }
       if (layout === 'scatter') {
         const positions = [
-          { top: '-20px', right: '-20px', deg: 15 },
-          { bottom: '-10px', left: '-15px', deg: -12 },
-          { top: '10px', left: '-25px', deg: 8 },
-          { bottom: '20px', right: '-25px', deg: -20 },
+          { top: '-40px', right: '-40px', deg: 15 },
+          { bottom: '-20px', left: '-30px', deg: -12 },
+          { top: '20px', left: '-50px', deg: 8 },
+          { bottom: '40px', right: '-50px', deg: -20 },
         ];
         const pos = positions[index % positions.length];
         return {
@@ -78,25 +78,25 @@ export const FunTestShareCard = forwardRef<HTMLDivElement, FunTestShareCardProps
           right: pos.right,
           bottom: pos.bottom,
           left: pos.left,
-          fontSize: `${24 + (index % 2) * 8}px`,
+          fontSize: `${48 + (index % 2) * 16}px`,
           transform: `rotate(${pos.deg}deg)`,
-          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
           opacity: 0.9,
           zIndex: 10,
         };
       }
       // orbit (default)
       const angle = (index / Math.max(total, 1)) * 360 - 90;
-      const radius = 52;
+      const radius = 104;
       const rad = (angle * Math.PI) / 180;
       return {
         position: 'absolute' as const,
         top: '50%',
         left: '50%',
-        marginTop: `${Math.sin(rad) * radius - 14}px`,
-        marginLeft: `${Math.cos(rad) * radius - 14}px`,
-        fontSize: '26px',
-        filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+        marginTop: `${Math.sin(rad) * radius - 28}px`,
+        marginLeft: `${Math.cos(rad) * radius - 28}px`,
+        fontSize: '52px',
+        filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
         zIndex: 10,
       };
     };
@@ -104,7 +104,7 @@ export const FunTestShareCard = forwardRef<HTMLDivElement, FunTestShareCardProps
     return (
       <div
         ref={ref}
-        className="relative w-[375px] h-[667px] flex-shrink-0 overflow-hidden rounded-none select-none"
+        className="relative w-[750px] h-[1334px] flex-shrink-0 overflow-hidden rounded-none select-none"
         style={{ fontFamily: "'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif" }}
       >
         {/* ===== Background Layers ===== */}
@@ -122,32 +122,32 @@ export const FunTestShareCard = forwardRef<HTMLDivElement, FunTestShareCardProps
         <div
           className="absolute inset-0 opacity-[0.06]"
           style={{
-            backgroundImage: `radial-gradient(circle, #fff 1px, transparent 1px)`,
-            backgroundSize: '18px 18px',
+            backgroundImage: `radial-gradient(circle, #fff 1.5px, transparent 1.5px)`,
+            backgroundSize: '36px 36px',
           }}
         />
 
         {/* Floating blobs */}
-        <div className="absolute top-6 right-4 w-28 h-28 rounded-full bg-white/5 blur-2xl" />
-        <div className="absolute bottom-36 left-2 w-36 h-36 rounded-full bg-white/5 blur-3xl" />
-        <div className="absolute top-1/2 right-0 w-20 h-40 bg-white/3 blur-2xl rotate-12" />
+        <div className="absolute top-12 right-8 w-56 h-56 rounded-full bg-white/5 blur-2xl" />
+        <div className="absolute bottom-72 left-4 w-72 h-72 rounded-full bg-white/5 blur-3xl" />
+        <div className="absolute top-1/2 right-0 w-40 h-80 bg-white/3 blur-2xl rotate-12" />
 
         {/* Decorative corner accents */}
-        <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-white/10 rounded-tl-lg" />
-        <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-white/10 rounded-tr-lg" />
-        <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-white/10 rounded-bl-lg" />
-        <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-white/10 rounded-br-lg" />
+        <div className="absolute top-8 left-8 w-16 h-16 border-l-2 border-t-2 border-white/10 rounded-tl-lg" />
+        <div className="absolute top-8 right-8 w-16 h-16 border-r-2 border-t-2 border-white/10 rounded-tr-lg" />
+        <div className="absolute bottom-8 left-8 w-16 h-16 border-l-2 border-b-2 border-white/10 rounded-bl-lg" />
+        <div className="absolute bottom-8 right-8 w-16 h-16 border-r-2 border-b-2 border-white/10 rounded-br-lg" />
 
         {/* Floating stars */}
         {[
-          { t: 8, l: 15, s: 10, r: 0 },
-          { t: 15, l: 85, s: 14, r: 15 },
-          { t: 35, l: 8, s: 8, r: -10 },
-          { t: 55, l: 90, s: 12, r: 25 },
-          { t: 72, l: 12, s: 9, r: -5 },
-          { t: 85, l: 80, s: 11, r: 10 },
-          { t: 45, l: 5, s: 7, r: 30 },
-          { t: 25, l: 92, s: 10, r: -20 },
+          { t: 8, l: 15, s: 20, r: 0 },
+          { t: 15, l: 85, s: 28, r: 15 },
+          { t: 35, l: 8, s: 16, r: -10 },
+          { t: 55, l: 90, s: 24, r: 25 },
+          { t: 72, l: 12, s: 18, r: -5 },
+          { t: 85, l: 80, s: 22, r: 10 },
+          { t: 45, l: 5, s: 14, r: 30 },
+          { t: 25, l: 92, s: 20, r: -20 },
         ].map((star, i) => (
           <div
             key={i}
@@ -164,19 +164,19 @@ export const FunTestShareCard = forwardRef<HTMLDivElement, FunTestShareCardProps
         ))}
 
         {/* ===== Content ===== */}
-        <div className="relative z-10 h-full flex flex-col px-7 pt-7 pb-6">
+        <div className="relative z-10 h-full flex flex-col px-14 pt-14 pb-12">
           {/* Top test badge */}
-          <div className="flex items-center justify-center mb-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/20 backdrop-blur-sm border border-white/10">
-              <Sparkles className="w-3 h-3 text-white/70" />
-              <span className="text-[11px] text-white/80 font-medium tracking-wide">{test.title}</span>
+          <div className="flex items-center justify-center mb-6">
+            <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-black/20 backdrop-blur-sm border border-white/10">
+              <Sparkles className="w-6 h-6 text-white/70" />
+              <span className="text-[22px] text-white/80 font-medium tracking-wide">{test.title}</span>
             </div>
           </div>
 
           {/* Rarity + rank badge */}
-          <div className="flex items-center justify-center mb-4">
+          <div className="flex items-center justify-center mb-8">
             <div
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider border ${
+              className={`inline-flex items-center gap-3 px-6 py-2 rounded-full text-[20px] font-bold tracking-wider border ${
                 result.rarity === 'SSR'
                   ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
                   : result.rarity === 'SR'
@@ -187,34 +187,34 @@ export const FunTestShareCard = forwardRef<HTMLDivElement, FunTestShareCardProps
               }`}
             >
               <span>{result.rarity || 'N'}</span>
-              <span className="w-px h-2.5 bg-white/20" />
+              <span className="w-px h-5 bg-white/20" />
               <span>{rarityLabel}</span>
-              <span className="w-px h-2.5 bg-white/20" />
+              <span className="w-px h-5 bg-white/20" />
               <span className="text-white/40 font-normal">击败{beatPercent}%的人</span>
             </div>
           </div>
 
           {/* ===== VISUAL PERSONA SCENE ===== */}
-          <div className="flex justify-center mb-4">
-            <div className="relative" style={{ width: '120px', height: '120px' }}>
+          <div className="flex justify-center mb-8">
+            <div className="relative" style={{ width: '240px', height: '240px' }}>
               {/* Glow behind */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-28 h-28 rounded-full bg-white/8 blur-2xl" />
+                <div className="w-56 h-56 rounded-full bg-white/8 blur-2xl" />
               </div>
 
               {/* Ring decoration */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[110px] h-[110px] rounded-full border border-white/8" />
+                <div className="w-[220px] h-[220px] rounded-full border border-white/8" />
               </div>
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[90px] h-[90px] rounded-full border border-white/5" />
+                <div className="w-[180px] h-[180px] rounded-full border border-white/5" />
               </div>
 
               {/* Main emoji */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <span
-                  className="text-6xl block"
-                  style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.4))' }}
+                  className="text-[120px] block"
+                  style={{ filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }}
                 >
                   {mainEmoji}
                 </span>
@@ -230,34 +230,34 @@ export const FunTestShareCard = forwardRef<HTMLDivElement, FunTestShareCardProps
           </div>
 
           {/* Result title */}
-          <div className="text-center mb-1">
-            <h2 className="text-[26px] font-black text-white leading-tight tracking-tight drop-shadow-lg">
+          <div className="text-center mb-2">
+            <h2 className="text-[52px] font-black text-white leading-tight tracking-tight drop-shadow-lg">
               {result.title}
             </h2>
           </div>
 
           {/* Subtitle */}
-          <div className="text-center mb-4">
-            <p className="text-[12px] text-white/55 font-medium tracking-wider">{result.subtitle}</p>
+          <div className="text-center mb-8">
+            <p className="text-[24px] text-white/55 font-medium tracking-wider">{result.subtitle}</p>
           </div>
 
           {/* Meme Quote — KEY VIRAL ELEMENT */}
-          <div className="relative mb-4">
-            <div className="absolute -top-1.5 left-3 text-3xl text-white/10 font-serif leading-none">"</div>
-            <div className="relative px-4 py-3.5 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10">
-              <p className="text-[14px] text-white/90 leading-relaxed text-center font-medium">
+          <div className="relative mb-8">
+            <div className="absolute -top-3 left-6 text-6xl text-white/10 font-serif leading-none">"</div>
+            <div className="relative px-8 py-7 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10">
+              <p className="text-[28px] text-white/90 leading-relaxed text-center font-medium">
                 {result.memeQuote}
               </p>
             </div>
-            <div className="absolute -bottom-1.5 right-3 text-3xl text-white/10 font-serif leading-none rotate-180">"</div>
+            <div className="absolute -bottom-3 right-6 text-6xl text-white/10 font-serif leading-none rotate-180">"</div>
           </div>
 
           {/* Traits */}
-          <div className="flex flex-wrap justify-center gap-2 mb-3">
+          <div className="flex flex-wrap justify-center gap-4 mb-6">
             {result.traits.slice(0, 3).map((trait, i) => (
               <span
                 key={i}
-                className="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-white/10 text-white/80 border border-white/10"
+                className="px-5 py-2 rounded-full text-[20px] font-semibold bg-white/10 text-white/80 border border-white/10"
               >
                 {trait}
               </span>
@@ -266,9 +266,9 @@ export const FunTestShareCard = forwardRef<HTMLDivElement, FunTestShareCardProps
 
           {/* MBTI Hint */}
           {result.mbtiHint && (
-            <div className="flex items-center justify-center gap-1.5 mb-3">
-              <Brain className="w-3 h-3 text-white/35" />
-              <span className="text-[10px] text-white/45">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <Brain className="w-6 h-6 text-white/35" />
+              <span className="text-[20px] text-white/45">
                 正经MBTI推测：
                 <span className="text-white/70 font-semibold">{result.mbtiHint}</span>
               </span>
@@ -277,39 +277,39 @@ export const FunTestShareCard = forwardRef<HTMLDivElement, FunTestShareCardProps
 
           {/* Secondary result */}
           {secondaryResult && secondaryResult.id !== result.id && (
-            <div className="text-center mb-2">
-              <p className="text-[9px] text-white/25 mb-1 tracking-wider">隐藏人格</p>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/5">
-                <span className="text-base">{secondaryResult.emoji}</span>
-                <span className="text-[10px] text-white/45">{secondaryResult.title}</span>
+            <div className="text-center mb-4">
+              <p className="text-[18px] text-white/25 mb-2 tracking-wider">隐藏人格</p>
+              <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/5">
+                <span className="text-3xl">{secondaryResult.emoji}</span>
+                <span className="text-[20px] text-white/45">{secondaryResult.title}</span>
               </div>
             </div>
           )}
 
           {/* Spacer */}
-          <div className="flex-1 min-h-[20px]" />
+          <div className="flex-1 min-h-[40px]" />
 
           {/* Bottom CTA / Brand */}
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 mb-3">
-              <div className="w-5 h-5 rounded-md bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-                <Sparkles className="w-3 h-3 text-white" />
+            <div className="inline-flex items-center gap-4 px-8 py-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 mb-6">
+              <div className="w-10 h-10 rounded-md bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-white" />
               </div>
-              <span className="text-[11px] text-white/80 font-medium">扫码测测你的{test.title}</span>
+              <span className="text-[22px] text-white/80 font-medium">扫码测测你的{test.title}</span>
             </div>
 
-            <div className="flex items-center justify-center gap-1.5">
-              <div className="w-3.5 h-3.5 rounded bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-                <Sparkles className="w-2 h-2 text-white" />
+            <div className="flex items-center justify-center gap-3">
+              <div className="w-7 h-7 rounded bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <span className="text-[9px] text-white/25 tracking-wider">MindType · AI性格测试</span>
+              <span className="text-[18px] text-white/25 tracking-wider">MindType · AI性格测试</span>
             </div>
           </div>
         </div>
 
         {/* Bottom vignette */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
+          className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none"
           style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.35), transparent)' }}
         />
       </div>

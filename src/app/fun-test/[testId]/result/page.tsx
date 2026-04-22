@@ -318,9 +318,9 @@ export default function FunTestResultPage() {
             生成精美分享图，发朋友圈/小红书/微博
           </p>
 
-          {/* Preview - scaled down */}
-          <div className="flex justify-center mb-4 overflow-hidden rounded-xl bg-black/20">
-            <div className="scale-[0.55] origin-top">
+          {/* Preview - scaled down for 750px card */}
+          <div className="flex justify-center mb-4 overflow-hidden rounded-xl bg-black/20 max-h-[500px]">
+            <div className="scale-[0.45] origin-top">
               <FunTestShareCard
                 ref={shareCardRef}
                 test={test}

@@ -14,8 +14,10 @@ import { Suspense } from 'react';
 
 function ResultContent() {
   const searchParams = useSearchParams();
-  const type = searchParams.get('type') || 'INTJ';
-  const typeInfo = mbtiTypes[type] || mbtiTypes.INTJ;
+  const rawType = searchParams.get('type') || 'INTJ';
+  const validTypes = Object.keys(mbtiTypes);
+  const type = validTypes.includes(rawType) ? rawType : 'INTJ';
+  const typeInfo = mbtiTypes[type];
 
   // Try to restore test answers from localStorage for AI interpretation
   const [savedAnswers, setSavedAnswers] = useState<number[] | null>(null);

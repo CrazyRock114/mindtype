@@ -1,9 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { streamDeepSeek, streamToContentChunks } from '@/lib/deepseek';
+import { rateLimit } from '@/lib/rate-limit';
+import { InterpretRequestSchema } from '@/lib/validation';
 
 export async function POST(request: NextRequest) {
+  // 速率限制
+  const limit = rateLimit(request);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: '请求过于频繁，请稍后再试' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil((limit.resetAt - Date.now()) / 1000)) } }
+    );
+  }
+
   try {
-    const { type, dimensions, answers, answerSummary } = await request.json();
+    const body = await request.json();
+
+    // 输入验证
+    const parseResult = InterpretRequestSchema.safeParse(body);
+    if (!parseResult.success) {
+      return NextResponse.json(
+        { error: '请求参数无效', details: parseResult.error.format() },
+        { status: 400 }
+      );
+    }
+
+    const { type, dimensions, answers, answerSummary } = parseResult.data;
 
     // Build dimension description
     const dimensionDesc = `这个类型的四个维度倾向：

@@ -211,9 +211,9 @@ export default function AuthPage() {
 
             {isLogin && (
               <div className="text-right">
-                <Link href="/auth/forgot-password" className="text-xs md:text-sm text-purple-400 hover:underline">
-                  忘记密码？
-                </Link>
+                <span className="text-xs md:text-sm text-muted-foreground">
+                  忘记密码请联系管理员
+                </span>
               </div>
             )}
 
@@ -237,13 +237,9 @@ export default function AuthPage() {
           {!isLogin && (
             <p className="mt-4 md:mt-6 text-center text-[10px] md:text-sm text-muted-foreground">
               注册即表示同意我们的{' '}
-              <Link href="/terms" className="text-purple-400 hover:underline">
-                服务条款
-              </Link>{' '}
+              <span className="text-purple-400">服务条款</span>{' '}
               和{' '}
-              <Link href="/privacy" className="text-purple-400 hover:underline">
-                隐私政策
-              </Link>
+              <span className="text-purple-400">隐私政策</span>
             </p>
           )}
         </Card>

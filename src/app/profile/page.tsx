@@ -105,24 +105,42 @@ export default function ProfilePage() {
     }
 
     try {
+      // 1. 数据库层面再次确认今天是否已签到（防止并发重复）
+      const today = new Date().toISOString().split('T')[0];
+      const { data: existingCheckin, error: checkError } = await client
+        .from('checkin_records')
+        .select('id')
+        .eq('user_id', user.id)
+        .gte('checkin_date', `${today}T00:00:00`)
+        .lt('checkin_date', `${today}T23:59:59`)
+        .maybeSingle();
+
+      if (checkError) throw checkError;
+      if (existingCheckin) {
+        setCanCheckin(false);
+        return;
+      }
+
       const pointsEarned = 5 + Math.min(profile?.consecutiveCheckins || 0, 5);
 
-      // 添加签到记录
-      await client.from('checkin_records').insert({
+      // 2. 添加签到记录
+      const { error: insertCheckinError } = await client.from('checkin_records').insert({
         user_id: user.id,
         points_earned: pointsEarned,
       });
+      if (insertCheckinError) throw insertCheckinError;
 
-      // 添加积分记录
-      await client.from('point_transactions').insert({
+      // 3. 添加积分记录
+      const { error: insertTxError } = await client.from('point_transactions').insert({
         user_id: user.id,
         amount: pointsEarned,
         type: 'checkin',
         description: `每日签到${profile?.consecutiveCheckins ? `（连续${profile.consecutiveCheckins + 1}天）` : ''}`,
       });
+      if (insertTxError) throw insertTxError;
 
-      // 更新用户积分和连续签到
-      await client
+      // 4. 更新用户积分和连续签到
+      const { error: updateError } = await client
         .from('user_profiles')
         .update({
           points: (profile?.points || 0) + pointsEarned,
@@ -130,12 +148,14 @@ export default function ProfilePage() {
           last_checkin_date: new Date().toISOString(),
         })
         .eq('id', user.id);
+      if (updateError) throw updateError;
 
       await refreshProfile();
       await fetchPointHistory();
       setCanCheckin(false);
     } catch (error) {
       console.error('Checkin error:', error);
+      alert('签到失败，请稍后重试');
     } finally {
       setCheckinLoading(false);
     }
@@ -165,29 +185,36 @@ export default function ProfilePage() {
     if (user) {
       const client = supabase();
       if (client) {
-        await client.from('share_records').insert({
-          user_id: user.id,
-          share_type: 'test_result',
-          platform: 'link',
-          points_earned: 10,
-        });
+        try {
+          const { error: shareError } = await client.from('share_records').insert({
+            user_id: user.id,
+            share_type: 'test_result',
+            platform: 'link',
+            points_earned: 10,
+          });
+          if (shareError) throw shareError;
 
-        await client.from('point_transactions').insert({
-          user_id: user.id,
-          amount: 10,
-          type: 'share',
-          description: '分享测试结果',
-        });
+          const { error: txError } = await client.from('point_transactions').insert({
+            user_id: user.id,
+            amount: 10,
+            type: 'share',
+            description: '分享测试结果',
+          });
+          if (txError) throw txError;
 
-        await client
-          .from('user_profiles')
-          .update({
-            points: (profile?.points || 0) + 10,
-          })
-          .eq('id', user.id);
+          const { error: updateError } = await client
+            .from('user_profiles')
+            .update({
+              points: (profile?.points || 0) + 10,
+            })
+            .eq('id', user.id);
+          if (updateError) throw updateError;
 
-        await refreshProfile();
-        await fetchPointHistory();
+          await refreshProfile();
+          await fetchPointHistory();
+        } catch (error) {
+          console.error('Share record error:', error);
+        }
       }
     }
   };
@@ -270,13 +297,11 @@ export default function ProfilePage() {
             </Button>
           </Link>
 
-          <Link href="/profile/history" className="block">
-            <Button variant="outline" className="h-auto py-3 md:py-4 flex-col gap-1 md:gap-2 w-full" size="sm">
-              <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-              <span className="text-xs md:text-sm">积分明细</span>
-              <span className="text-[10px] md:text-xs opacity-80">查看记录</span>
-            </Button>
-          </Link>
+          <Button variant="outline" className="h-auto py-3 md:py-4 flex-col gap-1 md:gap-2 w-full" size="sm" disabled>
+            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+            <span className="text-xs md:text-sm">积分明细</span>
+            <span className="text-[10px] md:text-xs opacity-80">开发中</span>
+          </Button>
         </div>
 
         {/* Stats */}

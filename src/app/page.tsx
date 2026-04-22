@@ -168,7 +168,7 @@ export default function HomePage() {
               <Link href="/industry" className="hover:text-foreground transition-colors">行业专区</Link>
             </div>
             <p className="text-xs text-muted-foreground">
-              2024 MindType. 用AI探索自我。
+              {new Date().getFullYear()} MindType. 用AI探索自我。
             </p>
           </div>
         </div>

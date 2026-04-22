@@ -75,7 +75,20 @@ function getSupabaseClient(): SupabaseClient | null {
 const LS_KEYS = {
   USER: 'mindtype_local_user',
   PROFILE: 'mindtype_local_profile',
+  PASSWORD_HASH: 'mindtype_local_pwhash',
 };
+
+/**
+ * 使用 Web Crypto API 对密码进行 SHA-256 哈希
+ * 注意：仅用于本地演示模式，不构成生产级安全
+ */
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 interface LocalUser {
   id: string;
@@ -118,6 +131,7 @@ function clearLocalAuth(): void {
   if (typeof window === 'undefined') return;
   localStorage.removeItem(LS_KEYS.USER);
   localStorage.removeItem(LS_KEYS.PROFILE);
+  localStorage.removeItem(LS_KEYS.PASSWORD_HASH);
 }
 
 // ============ AuthProvider ============
@@ -318,9 +332,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           lastCheckinDate: null,
         };
 
-        // 同时保存密码哈希用于登录验证（简易方式）
+        // 保存密码哈希（不再明文存储）
         if (typeof window !== 'undefined') {
-          localStorage.setItem('mindtype_local_password', password);
+          const passwordHash = await hashPassword(password);
+          localStorage.setItem(LS_KEYS.PASSWORD_HASH, passwordHash);
         }
 
         saveLocalUser(newUser);
@@ -371,9 +386,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         // 验证密码
         if (typeof window !== 'undefined') {
-          const savedPassword = localStorage.getItem('mindtype_local_password');
-          if (savedPassword !== null && savedPassword !== password) {
-            return { error: new Error('密码错误，请检查后重试') };
+          const savedHash = localStorage.getItem(LS_KEYS.PASSWORD_HASH);
+          if (savedHash !== null) {
+            const inputHash = await hashPassword(password);
+            if (inputHash !== savedHash) {
+              return { error: new Error('密码错误，请检查后重试') };
+            }
           }
         }
 

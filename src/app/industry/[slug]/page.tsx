@@ -213,7 +213,7 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
   // 未登录用户的注册引导
   if (!isLoading && !user) {
     return (
-      <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24">
+      <div className="min-h-screen w-full  px-4 md:px-6 pt-4 md:pt-24">
         <div className="max-w-4xl mx-auto">
           <div className="hidden md:block">
             <Link href="/industry">
@@ -294,7 +294,7 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
   // 已登录但未测试
   if (!isLoading && user && !profile?.mbtiType) {
     return (
-      <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24">
+      <div className="min-h-screen w-full  px-4 md:px-6 pt-4 md:pt-24">
         <div className="max-w-4xl mx-auto">
           <div className="hidden md:block">
             <Link href="/industry">
@@ -327,7 +327,7 @@ export default function IndustryDetailPage({ params }: IndustryDetailPageProps) 
   }
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24">
+    <div className="min-h-screen w-full  px-4 md:px-6 pt-4 md:pt-24">
       <div className="max-w-4xl mx-auto">
         {/* Header - hidden on mobile */}
         <div className="hidden md:block">

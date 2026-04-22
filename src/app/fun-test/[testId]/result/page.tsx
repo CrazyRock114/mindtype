@@ -119,7 +119,7 @@ export default function FunTestResultPage() {
 
   if (!test) {
     return (
-      <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24">
+      <div className="min-h-screen w-full px-4 md:px-6 pt-4 md:pt-24">
         <div className="max-w-2xl mx-auto text-center py-16 md:py-24">
           <h1 className="text-xl md:text-2xl font-bold mb-2">测试未找到</h1>
           <p className="text-muted-foreground mb-6">这个测试不存在或已被移除</p>
@@ -146,7 +146,7 @@ export default function FunTestResultPage() {
   const rarityClass = rarityColors[rarity] || rarityColors['N'];
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24 pb-24">
+    <div className="min-h-screen w-full px-4 md:px-6 pt-4 md:pt-24 pb-24">
       <div className="max-w-2xl mx-auto">
         {/* Back Link */}
         <div className="hidden md:block">

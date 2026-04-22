@@ -228,7 +228,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24">
+    <div className="min-h-screen w-full px-4 md:px-6 pt-4 md:pt-24">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-4 md:mb-8">

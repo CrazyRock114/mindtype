@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" className="dark" suppressHydrationWarning>
-      <body className="min-h-screen antialiased overflow-x-hidden w-full">
+      <body className="min-h-screen antialiased w-full">
         <AuthProvider>
           <StarBackground />
           <NavBar />

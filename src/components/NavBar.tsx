@@ -122,7 +122,7 @@ export function NavBar() {
               <Link
                 key={tab.href}
                 href={tab.href}
-                className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
+                className={`relative flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
                   active ? 'text-purple-400' : 'text-muted-foreground'
                 }`}
               >

@@ -119,7 +119,7 @@ function TestTaking({ tier, onBack }: { tier: (typeof tiers)[number]; onBack: ()
   const answeredCount = state.answers.filter((a) => a !== null).length;
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24">
+    <div className="min-h-screen w-full  px-4 md:px-6 pt-4 md:pt-24">
       <div className="max-w-2xl mx-auto mb-4 md:mb-12">
         <div className="hidden md:block">
           <Button variant="ghost" className="mb-8 -ml-4" onClick={onBack}>
@@ -197,7 +197,7 @@ function TestTaking({ tier, onBack }: { tier: (typeof tiers)[number]; onBack: ()
 
 function TierSelector({ onSelect }: { onSelect: (tier: (typeof tiers)[number]) => void }) {
   return (
-    <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24">
+    <div className="min-h-screen w-full  px-4 md:px-6 pt-4 md:pt-24">
       <div className="max-w-3xl mx-auto">
         <div className="hidden md:block">
           <Link href="/">

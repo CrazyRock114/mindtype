@@ -184,7 +184,7 @@ function ResultContent() {
   ];
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden px-4 md:px-6 pt-4 md:pt-24">
+    <div className="min-h-screen w-full px-4 md:px-6 pt-4 md:pt-24">
       <div className="max-w-4xl mx-auto">
         {/* Back Link - hidden on mobile (bottom tab provides nav) */}
         <div className="hidden md:block">

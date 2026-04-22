@@ -16,7 +16,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden">
+    <div className="min-h-screen w-full">
       {/* Hero Section - Mobile-first compact */}
       <section className="relative min-h-[100dvh] flex items-center justify-center px-4 md:px-6 pt-16 md:pt-0 overflow-hidden">
         {/* Gradient Orbs - smaller on mobile, contained */}

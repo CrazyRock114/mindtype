@@ -92,7 +92,7 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center px-4 md:px-6 py-8 md:py-12">
+    <div className="min-h-screen w-full flex items-center justify-center px-4 md:px-6 py-8 md:py-12">
       <div className="w-full max-w-md">
         {/* Header - hidden on mobile */}
         <div className="hidden md:block">

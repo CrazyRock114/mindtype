@@ -172,5 +172,3 @@ GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO authenticated;
 -- Enable anonymous access for public reads (optional)
 GRANT USAGE ON SCHEMA public TO anon;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO anon;
-
-print('MindType database schema created successfully!');

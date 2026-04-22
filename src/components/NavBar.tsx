@@ -28,7 +28,7 @@ export function NavBar() {
   const mobileTabs = [
     { href: '/', label: '首页', icon: Home },
     { href: '/test', label: '测试', icon: TestTube2 },
-    { href: '/sbti', label: '趣味', icon: Sparkles },
+    { href: '/fun-test', label: '趣味', icon: Sparkles },
     { href: '/industry', label: '行业', icon: Briefcase },
     { href: user ? '/profile' : '/auth', label: user ? '我的' : '登录', icon: user ? User : User },
   ];
@@ -42,7 +42,7 @@ export function NavBar() {
   const desktopLinks = [
     { href: '/', label: '首页' },
     { href: '/test', label: 'MBTI测试' },
-    { href: '/sbti', label: '趣味测试' },
+    { href: '/fun-test', label: '趣味测试' },
     { href: '/industry', label: '行业专区' },
   ];
 

@@ -1,0 +1,209 @@
+import { type FunTest } from '../types';
+import { calculateResult } from '../engine';
+
+/**
+ * 职场物种图鉴
+ * 打工人的生存现状大赏
+ */
+export const workTest: FunTest = {
+  id: 'work',
+  title: '职场物种图鉴',
+  subtitle: '你在职场中是什么生物？',
+  description: '10道灵魂拷问，测出你的职场物种。从卷王到摸鱼大师，从PUA受害者到反卷斗士——这里没有KPI，只有真相。',
+  category: '职场',
+  emoji: '💼',
+  themeColor: 'from-blue-500 via-indigo-500 to-purple-600',
+  accentColor: 'text-blue-400',
+  borderColor: 'border-blue-500/20',
+  questionCount: 10,
+  estimatedTime: '2分钟',
+  questions: [
+    {
+      id: 'w1', text: '周一早上看到工作群99+消息，你的反应是？',
+      emoji: '📱',
+      options: [
+        { text: '逐条回复，体现专业态度', weights: { juanwang: 3, mianju: 2, laoshi: 1 } },
+        { text: '只看@我的，其他的当没看见', weights: { mouyu: 3, juelan: 2, putong: 1 } },
+        { text: '直接免打扰，周末再说', weights: { juelan: 3, tangping: 2, putong: 1 } },
+        { text: '截图发朋友圈吐槽', weights: { baoer: 3, zhiqing: 2, putong: 1 } },
+      ],
+    },
+    {
+      id: 'w2', text: '领导在群里说「辛苦了」，你会？',
+      emoji: '👔',
+      options: [
+        { text: '回「不辛苦，应该的！」+ 奋斗表情包', weights: { juanwang: 3, mianju: 2, laoshi: 1 } },
+        { text: '已读不回，继续摸鱼', weights: { mouyu: 3, juelan: 2, tangping: 1 } },
+        { text: '回「确实挺辛苦的，能加薪吗？」', weights: { fankang: 3, zhiqing: 2, baipiao: 1 } },
+        { text: '回「您更辛苦」然后开始表演', weights: { mianju: 3, pua: 2, baipiao: 1 } },
+      ],
+    },
+    {
+      id: 'w3', text: '下班时间领导发消息让你改方案，你会？',
+      emoji: '🕐',
+      options: [
+        { text: '立刻打开电脑开始改', weights: { juanwang: 3, laoshi: 2, pua: 1 } },
+        { text: '假装没看见，2小时后回「刚看到」', weights: { mouyu: 3, juelan: 2, putong: 1 } },
+        { text: '直接回复「下班了，明天再说」', weights: { fankang: 3, juelan: 2, zhiqing: 1 } },
+        { text: '回「好的」然后继续打游戏', weights: { mouyu: 3, tangping: 2, baoer: 1 } },
+      ],
+    },
+    {
+      id: 'w4', text: '同事在办公室大声打电话，你会？',
+      emoji: '🗣️',
+      options: [
+        { text: '戴上耳机，默默忍受', weights: { laoshi: 3, pua: 2, putong: 1 } },
+        { text: '直接说「能不能小声点」', weights: { fankang: 3, zhiqing: 2, juelan: 1 } },
+        { text: '比TA更大声地打电话', weights: { baoer: 3, fankang: 2, juelan: 1 } },
+        { text: '搬去楼梯间接电话假装很忙', weights: { mianju: 3, mouyu: 2, baipiao: 1 } },
+      ],
+    },
+    {
+      id: 'w5', text: '你的工位最像什么？',
+      emoji: '🖥️',
+      options: [
+        { text: '极简风，只有电脑和一杯咖啡', weights: { laoshi: 3, putong: 2, juelan: 1 } },
+        { text: '杂货铺，零食、玩偶、绿植堆满', weights: { baoer: 3, tangping: 2, putong: 1 } },
+        { text: '样板间，领导来了都说好', weights: { mianju: 3, juanwang: 2, baipiao: 1 } },
+        { text: '废墟，文件和外卖盒共存', weights: { mouyu: 3, tangping: 2, juelan: 1 } },
+      ],
+    },
+    {
+      id: 'w6', text: '开会时领导让你发言，你会？',
+      emoji: '🎤',
+      options: [
+        { text: '提前准备好了PPT和数据', weights: { juanwang: 3, laoshi: 2, mianju: 1 } },
+        { text: '「我同意大家的观点」然后没然后了', weights: { mouyu: 3, putong: 2, tangping: 1 } },
+        { text: '开始阴阳怪气地吐槽项目', weights: { zhiqing: 3, fankang: 2, baoer: 1 } },
+        { text: '假装在记笔记，其实画小人', weights: { mouyu: 3, juelan: 2, tangping: 1 } },
+      ],
+    },
+    {
+      id: 'w7', text: '你的年度工作总结关键词是？',
+      emoji: '📊',
+      options: [
+        { text: '「超额完成」「突破自我」「再攀高峰」', weights: { juanwang: 3, mianju: 2, baipiao: 1 } },
+        { text: '「按时完成」「稳步前进」「持续优化」', weights: { laoshi: 3, putong: 2, mouyu: 1 } },
+        { text: '「还活着」「没猝死」「工资到账了」', weights: { zhiqing: 3, juelan: 2, tangping: 1 } },
+        { text: '「摸鱼」「摆烂」「等年终奖」', weights: { mouyu: 3, tangping: 2, juelan: 1 } },
+      ],
+    },
+    {
+      id: 'w8', text: '同事邀功抢了你的项目成果，你会？',
+      emoji: '⚔️',
+      options: [
+        { text: '默默忍受，下次注意', weights: { laoshi: 3, pua: 2, putong: 1 } },
+        { text: '在群里@所有人「这个项目是我做的」', weights: { fankang: 3, baoer: 2, zhiqing: 1 } },
+        { text: '发朋友圈暗讽，但不点名', weights: { zhiqing: 3, mouyu: 2, tangping: 1 } },
+        { text: '下次把项目做得更好让TA抢不了', weights: { juanwang: 3, laoshi: 2, fankang: 1 } },
+      ],
+    },
+    {
+      id: 'w9', text: '公司团建说是「自愿参加」，你会？',
+      emoji: '🍻',
+      options: [
+        { text: '第一个报名，还帮忙组织', weights: { juanwang: 3, mianju: 2, laoshi: 1 } },
+        { text: '「自愿」不去，在家睡觉', weights: { juelan: 3, tangping: 2, mouyu: 1 } },
+        { text: '去了但全程低头玩手机', weights: { mouyu: 3, putong: 2, zhiqing: 1 } },
+        { text: '去了然后喝多把真心话说出来了', weights: { baoer: 3, zhiqing: 2, fankang: 1 } },
+      ],
+    },
+    {
+      id: 'w10', text: '如果给你一次重新选择工作的机会，你会？',
+      emoji: '🔄',
+      options: [
+        { text: '还是选这家，毕竟熟悉了', weights: { laoshi: 3, putong: 2, pua: 1 } },
+        { text: '回老家开花店/书店/咖啡馆', weights: { tangping: 3, juelan: 2, zhiqing: 1 } },
+        { text: '去更大的公司卷更高的职位', weights: { juanwang: 3, mianju: 2, baipiao: 1 } },
+        { text: '当自由职业者，不接客户电话', weights: { juelan: 3, fankang: 2, baoer: 1 } },
+      ],
+    },
+  ],
+  results: {
+    juanwang: {
+      id: 'juanwang', title: '卷王之王', subtitle: 'JUAN-WANG',
+      description: '你的日程表排得比高考倒计时还满，你是那个让同事和同学都感到压力的存在。你不是在工作，你是在燃烧生命。温馨提示：卷可以，但别卷死了。',
+      traits: ['996达人', '永远在学习', '焦虑源泉', '自律狂魔'],
+      memeQuote: '不卷不是中国人。', mbtiHint: 'INTJ / ENTJ / ESTJ',
+      color: 'text-red-400', bgGradient: 'from-red-600 to-orange-700', emoji: '🔥', rarity: 'SR',
+    },
+    mouyu: {
+      id: 'mouyu', title: '摸鱼大师', subtitle: 'MO-YU',
+      description: '你是时间管理大师，表面上在认真工作，实际上脑子已经在度假。你深谙「工作是为了更好的摸鱼」之道，是职场隐藏Boss。你的演技足以拿奥斯卡。',
+      traits: ['多线程操作', '眼神管理', '摸鱼姿势多样', '演技派'],
+      memeQuote: '表面上在工作，实际上在摸鱼。', mbtiHint: 'INTP / ISTP / INFP',
+      color: 'text-teal-400', bgGradient: 'from-teal-600 to-cyan-700', emoji: '🐟', rarity: 'SR',
+    },
+    laoshi: {
+      id: 'laoshi', title: '老实人', subtitle: 'LAO-SHI',
+      description: '你是职场最稳定的元素——不会摸鱼，不会卷，不会反抗。你按时完成任务，从不给领导添麻烦。你是公司的基石，也是最容易被忽视的螺丝钉。',
+      traits: ['按时完成', '不惹事', '默默付出', '存在感低'],
+      memeQuote: '我不求升职，只求别裁员。', mbtiHint: 'ISFJ / ISTJ / ESFJ',
+      color: 'text-blue-400', bgGradient: 'from-blue-600 to-indigo-700', emoji: '🐢', rarity: 'R',
+    },
+    tangping: {
+      id: 'tangping', title: '躺平居士', subtitle: 'TANG-PING',
+      description: '你深谙躺平之道，信奉「努力不一定成功，但不努力一定很舒服」的人生哲学。你是反内卷先锋，淡泊名利，与世无争。你的存在是对996的无声抗议。',
+      traits: ['极简生活', '低欲望', '心态平和', '拒绝焦虑'],
+      memeQuote: '躺平是对抗内卷的最佳姿势。', mbtiHint: 'INFP / ISFP / ISTP',
+      color: 'text-green-400', bgGradient: 'from-green-600 to-emerald-700', emoji: '🛌', rarity: 'SR',
+    },
+    juelan: {
+      id: 'juelan', title: '摆烂艺术家', subtitle: 'JUE-LAN',
+      description: '你不是不努力，你是战略性放弃。你的座右铭是「只要我不开始，就不会失败」。你摆烂的姿态优美而富有哲学意味，是当代青年的精神图腾。',
+      traits: ['战略性放弃', '拖延症晚期', '逃避大师', '佛系'],
+      memeQuote: '开摆！', mbtiHint: 'INTP / INFP / ISTP',
+      color: 'text-purple-400', bgGradient: 'from-purple-600 to-violet-700', emoji: '🎨', rarity: 'SR',
+    },
+    mianju: {
+      id: 'mianju', title: '职场面具人', subtitle: 'MIAN-JU',
+      description: '你在领导面前是奋斗逼，在同事面前是好好先生，在客户面前是专业精英。你的面具层层叠加，摘下来之后你忘了自己长什么样。你是职场的变色龙。',
+      traits: ['千面人格', '演技派', '左右逢源', '内心空虚'],
+      memeQuote: '上班就是演戏，演技决定工资。', mbtiHint: 'INFJ / ENFJ / ESFP',
+      color: 'text-amber-400', bgGradient: 'from-amber-600 to-yellow-700', emoji: '🎭', rarity: 'SSR',
+    },
+    fankang: {
+      id: 'fankang', title: '反卷斗士', subtitle: 'FAN-KANG',
+      description: '你是职场里的刺头，领导眼中的「问题员工」。但你只是拒绝不合理的要求，维护自己的权益。你是打工人的嘴替，是整顿职场的新生代。',
+      traits: ['敢说不', '维权意识', '整顿职场', '嘴替'],
+      memeQuote: '这班不上也罢！', mbtiHint: 'ENTP / ESTP / ENFP',
+      color: 'text-orange-400', bgGradient: 'from-orange-600 to-red-700', emoji: '✊', rarity: 'SSR',
+    },
+    zhiqing: {
+      id: 'zhiqing', title: '职场清醒者', subtitle: 'ZHI-QING',
+      description: '你看透了职场的一切套路——画饼、PUA、大饼、鸡汤。你不卷不摆，只是冷静地拿工资换时间。你是清醒的打工人，也是孤独的观察者。',
+      traits: ['看透一切', '理性冷静', '不抱幻想', '观察者'],
+      memeQuote: '打工而已，别太上头。', mbtiHint: 'INTJ / INTP / ISTJ',
+      color: 'text-cyan-400', bgGradient: 'from-cyan-600 to-blue-700', emoji: '🧊', rarity: 'SR',
+    },
+    pua: {
+      id: 'pua', title: 'PUA受害者', subtitle: 'PUA-VIC',
+      description: '你总是被领导「寄予厚望」，被同事「寻求帮助」，被公司「培养」。你加班最多、工资最少、背锅最勤。你不是能力差，你只是太好说话了。',
+      traits: ['背锅侠', '老好人', '加班狂', '自我怀疑'],
+      memeQuote: '领导说我很重要，但从不给我加薪。', mbtiHint: 'ISFJ / INFJ / INFP',
+      color: 'text-rose-400', bgGradient: 'from-rose-600 to-pink-700', emoji: '😢', rarity: 'R',
+    },
+    baoer: {
+      id: 'baoer', title: '职场二哈', subtitle: 'BAO-ER',
+      description: '你是职场里的开心果，也是定时炸弹。你口无遮拦、直言不讳、经常说出大家不敢说的话。领导怕你，同事爱你，HR盯着你。',
+      traits: ['口无遮拦', '开心果', '定时炸弹', '真性情'],
+      memeQuote: '我就是管不住我这张嘴！', mbtiHint: 'ENTP / ESTP / ENFP',
+      color: 'text-yellow-400', bgGradient: 'from-yellow-600 to-amber-700', emoji: '🐕', rarity: 'SR',
+    },
+    baipiao: {
+      id: 'baipiao', title: '白嫖怪', subtitle: 'BAI-PIAO',
+      description: '你在公司里只干一件事：薅羊毛。免费咖啡、免费零食、免费培训、免费空调——你一样不落。你的工资是精神损失费，你的福利才是真实收入。',
+      traits: ['薅羊毛', '福利雷达', '精明算计', '乐在其中'],
+      memeQuote: '公司的羊毛不薅白不薅。', mbtiHint: 'ESTP / ISTP / ENTP',
+      color: 'text-lime-400', bgGradient: 'from-lime-600 to-green-700', emoji: '🦙', rarity: 'R',
+    },
+    putong: {
+      id: 'putong', title: '普通打工人', subtitle: 'PU-TONG',
+      description: '你没什么特别的，就是一个普通的打工人。你不喜欢工作，但也没有勇气辞职。你偶尔摸鱼，偶尔加班，偶尔抱怨，偶尔满足。你是大多数。',
+      traits: ['普通人', '随波逐流', '偶尔挣扎', '大多数'],
+      memeQuote: '我就是个普通人，活着就不错了。', mbtiHint: 'ISTJ / ISFJ / ESTJ',
+      color: 'text-slate-400', bgGradient: 'from-slate-600 to-gray-700', emoji: '👤', rarity: 'N',
+    },
+  },
+  calculate: (answers) => calculateResult(workTest, answers),
+};

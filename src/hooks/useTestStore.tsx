@@ -9,6 +9,7 @@ interface TestState {
   isComplete: boolean;
   result: TestResult | null;
   isLoading: boolean;
+  questionCount: number;
 }
 
 type TestAction =
@@ -17,16 +18,19 @@ type TestAction =
   | { type: 'PREV_QUESTION' }
   | { type: 'SKIP_QUESTION' }
   | { type: 'SET_RESULT'; result: TestResult }
-  | { type: 'RESET_TEST' }
+  | { type: 'RESET_TEST'; questionCount: number }
   | { type: 'RESTORE_STATE'; state: Partial<TestState> };
 
-const initialState: TestState = {
-  currentQuestion: 0,
-  answers: Array(28).fill(null),
-  isComplete: false,
-  result: null,
-  isLoading: false,
-};
+function createInitialState(questionCount: number): TestState {
+  return {
+    currentQuestion: 0,
+    answers: Array(questionCount).fill(null),
+    isComplete: false,
+    result: null,
+    isLoading: false,
+    questionCount,
+  };
+}
 
 function testReducer(state: TestState, action: TestAction): TestState {
   switch (action.type) {
@@ -37,7 +41,7 @@ function testReducer(state: TestState, action: TestAction): TestState {
     case 'NEXT_QUESTION':
       return {
         ...state,
-        currentQuestion: Math.min(state.currentQuestion + 1, state.answers.length - 1),
+        currentQuestion: Math.min(state.currentQuestion + 1, state.questionCount - 1),
       };
     case 'PREV_QUESTION':
       return {
@@ -47,7 +51,7 @@ function testReducer(state: TestState, action: TestAction): TestState {
     case 'SKIP_QUESTION':
       return {
         ...state,
-        currentQuestion: Math.min(state.currentQuestion + 1, state.answers.length - 1),
+        currentQuestion: Math.min(state.currentQuestion + 1, state.questionCount - 1),
       };
     case 'SET_RESULT':
       return {
@@ -57,7 +61,7 @@ function testReducer(state: TestState, action: TestAction): TestState {
         isLoading: false,
       };
     case 'RESET_TEST':
-      return initialState;
+      return createInitialState(action.questionCount);
     case 'RESTORE_STATE':
       return { ...state, ...action.state };
     default:
@@ -72,13 +76,18 @@ interface TestContextType {
   prevQuestion: () => void;
   skipQuestion: () => void;
   setResult: (result: TestResult) => void;
-  resetTest: () => void;
+  resetTest: (questionCount: number) => void;
 }
 
 const TestContext = createContext<TestContextType | null>(null);
 
-export function TestProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(testReducer, initialState);
+export function TestProvider({ children, questionCount = 28 }: { children: ReactNode; questionCount?: number }) {
+  const [state, dispatch] = useReducer(testReducer, createInitialState(questionCount));
+
+  // Reset when questionCount changes
+  useEffect(() => {
+    dispatch({ type: 'RESET_TEST', questionCount });
+  }, [questionCount]);
 
   // Restore from localStorage on mount
   useEffect(() => {
@@ -86,12 +95,14 @@ export function TestProvider({ children }: { children: ReactNode }) {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        dispatch({ type: 'RESTORE_STATE', state: parsed });
+        if (parsed.answers && parsed.answers.length === questionCount) {
+          dispatch({ type: 'RESTORE_STATE', state: parsed });
+        }
       } catch (e) {
         console.error('Failed to restore test state:', e);
       }
     }
-  }, []);
+  }, [questionCount]);
 
   // Save to localStorage on change
   useEffect(() => {
@@ -101,9 +112,10 @@ export function TestProvider({ children }: { children: ReactNode }) {
         answers: state.answers,
         isComplete: false,
         result: null,
+        questionCount: state.questionCount,
       }));
     }
-  }, [state.currentQuestion, state.answers, state.isComplete]);
+  }, [state.currentQuestion, state.answers, state.isComplete, state.questionCount]);
 
   const selectAnswer = (value: number) => {
     dispatch({ type: 'SELECT_ANSWER', questionIndex: state.currentQuestion, value });
@@ -127,8 +139,8 @@ export function TestProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(`mbti_result_${result.type}`, JSON.stringify(result));
   };
 
-  const resetTest = () => {
-    dispatch({ type: 'RESET_TEST' });
+  const resetTest = (newQuestionCount: number) => {
+    dispatch({ type: 'RESET_TEST', questionCount: newQuestionCount });
     localStorage.removeItem('mbti_test_progress');
   };
 

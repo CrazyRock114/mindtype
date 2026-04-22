@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Brain, Sparkles, MessageCircle, Briefcase, ArrowRight, ChevronDown } from 'lucide-react';
+import { Brain, Sparkles, MessageCircle, Briefcase, ArrowRight, ChevronDown, Clock, HelpCircle } from 'lucide-react';
+import { funTestList, categoryLabels } from '@/lib/fun-tests';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { MBTIGrid } from '@/components/MBTIGrid';
@@ -125,6 +126,64 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Fun Test Matrix Section */}
+      <section className="py-12 md:py-24 px-4 md:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10 md:mb-16">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4">
+              <span className="gradient-text">趣味测试矩阵</span>
+            </h2>
+            <p className="text-sm md:text-base text-muted-foreground">
+              12种搞怪测试，测出你的隐藏人格
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {funTestList.map((test) => (
+              <Link key={test.id} href={`/fun-test/${test.id}`} className="block group">
+                <Card className={`p-4 md:p-6 bg-card/60 backdrop-blur-sm ${test.borderColor} card-hover h-full flex flex-col`}>
+                  <div className="flex items-start gap-3 md:gap-4 mb-3">
+                    <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br ${test.themeColor} flex items-center justify-center text-xl md:text-2xl flex-shrink-0`}>
+                      {test.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-sm md:text-base mb-0.5 group-hover:text-purple-400 transition-colors truncate">
+                        {test.title}
+                      </h3>
+                      <p className="text-[10px] md:text-xs text-muted-foreground">
+                        {categoryLabels[test.category] || test.category}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-xs md:text-sm text-muted-foreground leading-relaxed flex-1 line-clamp-2 mb-3">
+                    {test.description}
+                  </p>
+                  <div className="flex items-center gap-3 text-[10px] md:text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <HelpCircle className="w-3 h-3" />
+                      {test.questionCount}题
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {test.estimatedTime}
+                    </span>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+
+          <div className="text-center mt-8 md:mt-12">
+            <Link href="/fun-test">
+              <Button variant="outline" className="border-purple-500/30 hover:border-purple-500 hover:bg-purple-500/10">
+                查看全部测试
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section - compact on mobile */}
       <section className="py-12 md:py-24 px-4 md:px-6">
         <div className="max-w-4xl mx-auto text-center">
@@ -164,7 +223,7 @@ export default function HomePage() {
             </div>
             <div className="flex gap-6 text-xs md:text-sm text-muted-foreground">
               <Link href="/test" className="hover:text-foreground transition-colors">MBTI测试</Link>
-              <Link href="/sbti" className="hover:text-foreground transition-colors">趣味测试</Link>
+              <Link href="/fun-test" className="hover:text-foreground transition-colors">趣味测试</Link>
               <Link href="/industry" className="hover:text-foreground transition-colors">行业专区</Link>
             </div>
             <p className="text-xs text-muted-foreground">

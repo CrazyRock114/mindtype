@@ -420,27 +420,27 @@ export function calculateMBTI(answers: number[]): { type: string; dimensions: { 
   };
 
   mbtiQuestions.forEach((question, index) => {
-    if (answers[index] !== undefined) {
+    if (answers[index] !== undefined && answers[index] !== null) {
       const value = answers[index];
-      if (value > 0) {
-        dimensions[question.dimension] += question.weightA * Math.abs(value - 3);
-      } else {
-        dimensions[question.dimension] += question.weightB * Math.abs(value - 3);
-      }
+      // value: 1-5 where 1=完全同意A, 3=中立, 5=完全同意B
+      // deviation: +2~ -2, positive = A side, negative = B side
+      const deviation = 3 - value;
+      dimensions[question.dimension] += question.weightA * deviation;
     }
   });
 
   // 归一化到 -100 ~ 100
-  const maxScore = mbtiQuestions.length / 4;
+  const questionsPerDim = mbtiQuestions.filter(q => q.dimension === 'EI').length;
+  const maxScore = questionsPerDim * 2; // max deviation per question = 2
   Object.keys(dimensions).forEach(key => {
     dimensions[key as keyof typeof dimensions] = Math.round((dimensions[key as keyof typeof dimensions] / maxScore) * 100);
   });
 
   const type = (
-    (dimensions.EI > 0 ? 'E' : 'I') +
-    (dimensions.SN > 0 ? 'S' : 'N') +
-    (dimensions.TF > 0 ? 'T' : 'F') +
-    (dimensions.JP > 0 ? 'J' : 'P')
+    (dimensions.EI >= 0 ? 'E' : 'I') +
+    (dimensions.SN >= 0 ? 'S' : 'N') +
+    (dimensions.TF >= 0 ? 'T' : 'F') +
+    (dimensions.JP >= 0 ? 'J' : 'P')
   );
 
   return { type, dimensions };

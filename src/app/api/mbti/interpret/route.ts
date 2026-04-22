@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { LLMClient, Config } from 'coze-coding-dev-sdk';
-
-const config = new Config();
-const client = new LLMClient(config);
+import { streamDeepSeek, streamToContentChunks } from '@/lib/deepseek';
 
 export async function POST(request: NextRequest) {
   try {
@@ -58,12 +55,12 @@ ${answerContext}
             { role: 'user' as const, content: '请为我生成性格解读报告' }
           ];
 
-          for await (const chunk of client.stream(messages, {
+          const responseStream = await streamDeepSeek(messages, {
             temperature: 0.7,
-          })) {
-            if (chunk.content) {
-              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: chunk.content })}\n\n`));
-            }
+          });
+
+          for await (const chunk of streamToContentChunks(responseStream)) {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: chunk })}\n\n`));
           }
 
           controller.enqueue(encoder.encode(`data: [DONE]\n\n`));

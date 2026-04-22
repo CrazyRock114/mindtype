@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { LLMClient, Config, Message } from 'coze-coding-dev-sdk';
-
-const config = new Config();
-const client = new LLMClient(config);
+import { streamDeepSeek, streamToContentChunks } from '@/lib/deepseek';
 
 const mbtiAnalysisPrompt = `你是MindType的专业MBTI职业发展顾问。请基于用户的MBTI人格类型和目标行业，提供专业、深入且实用的职业发展分析。
 
@@ -46,9 +43,9 @@ export async function POST(request: NextRequest) {
 
     const userMessage = `我想了解我的${mbtiType}（${mbtiInfo.name}）人格在${industryName}行业的发展前景和建议。\n\n我的MBTI特质：${mbtiInfo.description}\n\n目标行业特点：${industryInfo}`;
 
-    const allMessages: Message[] = [
-      { role: 'system', content: mbtiAnalysisPrompt },
-      { role: 'user', content: userMessage },
+    const allMessages = [
+      { role: 'system' as const, content: mbtiAnalysisPrompt },
+      { role: 'user' as const, content: userMessage },
     ];
 
     // Create readable stream for SSE
@@ -57,13 +54,13 @@ export async function POST(request: NextRequest) {
         const encoder = new TextEncoder();
 
         try {
-          for await (const chunk of client.stream(allMessages, {
+          const responseStream = await streamDeepSeek(allMessages, {
             temperature: 0.7,
-          })) {
-            if (chunk.content) {
-              const data = JSON.stringify({ content: chunk.content });
-              controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-            }
+          });
+
+          for await (const chunk of streamToContentChunks(responseStream)) {
+            const data = JSON.stringify({ content: chunk });
+            controller.enqueue(encoder.encode(`data: ${data}\n\n`));
           }
 
           // Add done signal

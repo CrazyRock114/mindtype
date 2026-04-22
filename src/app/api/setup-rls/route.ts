@@ -9,8 +9,8 @@ import { NextResponse } from 'next/server';
  * 使用方式：curl -X POST http://localhost:5000/api/setup-rls
  */
 export async function POST() {
-  const url = process.env.COZE_SUPABASE_URL;
-  const serviceRoleKey = process.env.COZE_SUPABASE_SERVICE_ROLE_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !serviceRoleKey) {
     return NextResponse.json(
@@ -24,10 +24,10 @@ export async function POST() {
   try {
     // 使用 Supabase REST API + service role key 检查 RLS 状态
     // 如果 anon key 能查到数据，说明 RLS 未启用
-    const anonKey = process.env.COZE_SUPABASE_ANON_KEY;
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     if (!anonKey) {
       return NextResponse.json(
-        { error: 'COZE_SUPABASE_ANON_KEY 未配置' },
+        { error: 'NEXT_PUBLIC_SUPABASE_ANON_KEY 未配置' },
         { status: 500 }
       );
     }
